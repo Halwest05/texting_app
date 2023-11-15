@@ -1,0 +1,43 @@
+name: texting_app
+description: A new Flutter project.
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: '>=3.1.5 <4.0.0'
+
+dependencies:
+  get:
+  flutter_holo_date_picker:
+  image_picker:
+  image_cropper:
+  flutter_localizations:
+    sdk: flutter
+  intl:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
+  generate: true
+
+  fonts:
+    - family: GretaTextArabic
+      fonts:
+        - asset: assets/fonts/GretaTextArabic-Regular.ttf
+        - asset: assets/fonts/GretaTextArabic-Bold.ttf
+          weight: 700
+
+  assets:
+    - assets/images/stay_connected.jpg
+    - assets/images/unknown_person.jpg
+    - assets/images/kurdistan_flag.png
+    - assets/images/us_flag.png
+
+  
+        
