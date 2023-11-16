@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:get/get.dart';
 import 'package:texting_app/pages/login_page.dart';
+import 'package:texting_app/tools.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -87,10 +88,6 @@ class _HomePageState extends State<HomePage> {
                   leading: const Icon(Icons.person_add)),
               const Divider(color: Colors.black45),
               ListTile(
-                  title: Text(AppLocalizations.of(context)!.add_friend),
-                  leading: const Icon(Icons.person_add_alt_1)),
-              const Divider(color: Colors.black45),
-              ListTile(
                   title: Text(AppLocalizations.of(context)!.logout),
                   leading: const Icon(Icons.logout_rounded),
                   onTap: () => showDialog(
@@ -153,12 +150,10 @@ class SearchBottomSheet extends StatefulWidget {
 
 class _SearchBottomSheetState extends State<SearchBottomSheet>
     with TickerProviderStateMixin {
-  late final TextEditingController _searchController;
   late final TabController _tabController;
 
   @override
   void initState() {
-    _searchController = TextEditingController();
     _tabController = TabController(length: 2, vsync: this);
 
     super.initState();
@@ -168,7 +163,6 @@ class _SearchBottomSheetState extends State<SearchBottomSheet>
   void dispose() {
     super.dispose();
 
-    _searchController.dispose();
     _tabController.dispose();
   }
 
@@ -184,22 +178,6 @@ class _SearchBottomSheetState extends State<SearchBottomSheet>
           return Column(
             children: [
               const SizedBox(height: 10),
-              Padding(
-                padding: const EdgeInsets.all(6.0),
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15)),
-                  clipBehavior: Clip.antiAlias,
-                  child: TextField(
-                      controller: _searchController,
-                      decoration: InputDecoration(
-                          hintText: AppLocalizations.of(context)!.search,
-                          suffixIcon: IconButton(
-                              onPressed: () => _searchController.clear(),
-                              icon: const Icon(Icons.clear_rounded)),
-                          prefixIcon: const Icon(Icons.search_rounded))),
-                ),
-              ),
               TabBar(
                   tabs: const [
                     Tab(icon: Icon(Icons.people), text: "Friends"),
@@ -208,33 +186,12 @@ class _SearchBottomSheetState extends State<SearchBottomSheet>
                   controller: _tabController,
                   labelColor: Colors.purple,
                   unselectedLabelColor: Colors.black45),
-              const Divider(color: Colors.black45),
               Flexible(
                 child: TabBarView(
                   controller: _tabController,
-                  children: [
-                    Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 6),
-                        child: ListView.builder(
-                            itemBuilder: (context, index) =>
-                                const Column(children: [
-                                  FriendTile(),
-                                  Divider(
-                                    color: Colors.black45,
-                                  )
-                                ]),
-                            itemCount: 5)),
-                    Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 6),
-                        child: ListView.builder(
-                            itemBuilder: (context, index) =>
-                                const Column(children: [
-                                  FriendTile(),
-                                  Divider(
-                                    color: Colors.black45,
-                                  )
-                                ]),
-                            itemCount: 5)),
+                  children: const [
+                    FriendsTabBottomSheet(),
+                    GlobalTabBottomSheet()
                   ],
                 ),
               )
@@ -252,88 +209,230 @@ class _SearchBottomSheetState extends State<SearchBottomSheet>
   }
 }
 
-class FriendTile extends StatelessWidget {
-  const FriendTile({super.key});
+class FriendsTabBottomSheet extends StatefulWidget {
+  const FriendsTabBottomSheet({super.key});
+
+  @override
+  State<FriendsTabBottomSheet> createState() => _FriendsTabBottomSheetState();
+}
+
+class _FriendsTabBottomSheetState extends State<FriendsTabBottomSheet> {
+  late final TextEditingController _searchController;
+
+  static List<MiniProfile> profiles = [
+    MiniProfile(
+        name: "Halmat Mohammed",
+        imgPath: MyTools.testPropic1,
+        message: "ajsdkhsakjdsaasdjksa"),
+    MiniProfile(
+        name: "Hallo Ahmed",
+        imgPath: MyTools.testPropic2,
+        message: "ajsdkhsakjdsaq9w8diok"),
+    MiniProfile(
+        name: "Halkawt Mahmood",
+        imgPath: MyTools.testPropic3,
+        message: "ajsdkhsakjdsawdhjqkd"),
+    MiniProfile(
+        name: "Halwest Hamamin",
+        imgPath: MyTools.testPropic1,
+        message: "ajsdkhsakjdsa19i2ijks"),
+    MiniProfile(
+        name: "Hallsho Mlshor",
+        imgPath: MyTools.testPropic4,
+        message: "n8e29es28y71s182u"),
+    MiniProfile(
+        name: "Halgwrd Karwan",
+        imgPath: MyTools.testPropic3,
+        message: "ajsdkhsakjdsaas9duiasojd")
+  ];
+
+  List<MiniProfile> filteredProfiles = [];
+
+  @override
+  void initState() {
+    _searchController = TextEditingController();
+
+    _searchController.addListener(() {
+      setState(() {
+        filteredProfiles = profiles
+            .where((element) => element.name.startsWith(_searchController.text))
+            .toList();
+      });
+    });
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {},
-      borderRadius: BorderRadius.circular(15),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 2),
-        child: Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 8),
-              child: Card(
-                  shape: const CircleBorder(),
-                  clipBehavior: Clip.hardEdge,
-                  child: Image.asset("assets/images/unknown_person.jpg",
-                      height: 60)),
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
             ),
-            const SizedBox(width: 8),
-            const Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Halwest Mohammed", style: TextStyle(fontSize: 16)),
-                SizedBox(height: 4),
-                Row(
-                  children: [
-                    SizedBox(width: 5),
-                    Text("Hallo", style: TextStyle(color: Colors.black54))
-                  ],
-                )
-              ],
-            ),
-            Expanded(
-              child: Align(
-                alignment:
-                    isKurdish ? Alignment.centerLeft : Alignment.centerRight,
-                child: Padding(
-                    padding: const EdgeInsets.only(right: 5),
-                    child: IconButton(
-                        color: Colors.purple,
-                        onPressed: () {},
-                        icon: const Icon(Icons.chat))),
-              ),
-            ),
-          ],
+            clipBehavior: Clip.antiAlias,
+            child: TextField(
+                controller: _searchController,
+                decoration: InputDecoration(
+                    hintText: AppLocalizations.of(context)!.search,
+                    suffixIcon: IconButton(
+                        onPressed: () => _searchController.clear(),
+                        icon: const Icon(Icons.clear_rounded)),
+                    prefixIcon: const Icon(Icons.search_rounded))),
+          ),
         ),
-      ),
+        const Divider(color: Colors.black45),
+        filteredProfiles.isEmpty && _searchController.text.isNotEmpty
+            ? const Expanded(
+                child: Center(
+                  child: Text("No people found..."),
+                ),
+              )
+            : Flexible(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 6),
+                  child: ListView.builder(
+                      itemBuilder: (context, index) => Column(children: [
+                            FriendTabBottomSheetTile(
+                                profile: _searchController.text.isEmpty
+                                    ? profiles[index]
+                                    : filteredProfiles[index]),
+                            const Divider(color: Colors.black45)
+                          ]),
+                      itemCount: _searchController.text.isEmpty
+                          ? profiles.length
+                          : filteredProfiles.length),
+                ),
+              )
+      ],
     );
   }
-
-  bool get isKurdish => Get.locale!.languageCode == "fa" ? true : false;
 }
 
-class ChatsTab extends StatelessWidget {
-  const ChatsTab({super.key});
+class GlobalTabBottomSheet extends StatefulWidget {
+  const GlobalTabBottomSheet({super.key});
+
+  @override
+  State<GlobalTabBottomSheet> createState() => _GlobalTabBottomSheetState();
+}
+
+class _GlobalTabBottomSheetState extends State<GlobalTabBottomSheet> {
+  late final TextEditingController _searchController;
+
+  @override
+  void initState() {
+    _searchController = TextEditingController();
+
+    _searchController.addListener(() {
+      setState(() {
+        filteredProfiles = profiles
+            .where((element) => element.name.startsWith(_searchController.text))
+            .toList();
+      });
+    });
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+
+    super.dispose();
+  }
+
+  static List<MiniProfile> profiles = [
+    MiniProfile(
+        name: "Ahmed Mohammed",
+        imgPath: MyTools.testPropic2,
+        message: "ajsdkhsakjdsaasdjksa"),
+    MiniProfile(
+        name: "Karwan Mhaiadin",
+        imgPath: MyTools.testPropic3,
+        message: "ajsdkhsakjdsaq9w8diok"),
+    MiniProfile(
+        name: "Abduljabar farooq",
+        imgPath: MyTools.testPropic4,
+        message: "ajsdkhsakjdsawdhjqkd"),
+    MiniProfile(
+        name: "Halwest Hamamin",
+        imgPath: MyTools.testPropic2,
+        message: "ajsdkhsakjdsa19i2ijks"),
+    MiniProfile(
+        name: "Hallsho Mlshor",
+        imgPath: MyTools.testPropic4,
+        message: "n8e29es28y71s182u"),
+    MiniProfile(
+        name: "Karzhin Tanzhin",
+        imgPath: MyTools.testPropic1,
+        message: "ajsdkhsakjdsaas9duiasojd")
+  ];
+
+  List<MiniProfile> filteredProfiles = [];
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () async {
-        return await Future.delayed(const Duration(seconds: 1));
-      },
-      child: ListView.builder(
-          padding: const EdgeInsets.only(top: 25, left: 12, right: 12),
-          itemBuilder: (context, index) {
-            return const Column(
-              children: [
-                ChatsTile(),
-                Divider(color: Colors.black45),
-              ],
-            );
-          },
-          itemCount: 10),
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            clipBehavior: Clip.antiAlias,
+            child: TextField(
+                controller: _searchController,
+                decoration: InputDecoration(
+                    hintText: AppLocalizations.of(context)!.search,
+                    suffixIcon: IconButton(
+                        onPressed: () => _searchController.clear(),
+                        icon: const Icon(Icons.clear_rounded)),
+                    prefixIcon: const Icon(Icons.search_rounded))),
+          ),
+        ),
+        const Divider(color: Colors.black45),
+        filteredProfiles.isEmpty && _searchController.text.isNotEmpty
+            ? const Expanded(
+                child: Center(
+                  child: Text("No people found..."),
+                ),
+              )
+            : Flexible(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 6),
+                  child: ListView.builder(
+                      itemBuilder: (context, index) => Column(children: [
+                            GlobalTabBottomSheetTile(
+                                profile: _searchController.text.isEmpty
+                                    ? profiles[index]
+                                    : filteredProfiles[index]),
+                            const Divider(color: Colors.black45)
+                          ]),
+                      itemCount: _searchController.text.isEmpty
+                          ? profiles.length
+                          : filteredProfiles.length),
+                ),
+              )
+      ],
     );
   }
 }
 
-class ChatsTile extends StatelessWidget {
-  const ChatsTile({super.key});
+class FriendTabBottomSheetTile extends StatelessWidget {
+  const FriendTabBottomSheetTile({super.key, required this.profile});
+
+  final MiniProfile profile;
 
   @override
   Widget build(BuildContext context) {
@@ -346,71 +445,41 @@ class ChatsTile extends StatelessWidget {
           children: [
             Padding(
               padding: EdgeInsets.only(
-                  left: isKurdish ? 0 : 8, right: isKurdish ? 8 : 0),
+                  left: MyTools.isKurdish ? 0 : 8,
+                  right: MyTools.isKurdish ? 8 : 0),
               child: Card(
                   shape: const CircleBorder(),
                   clipBehavior: Clip.hardEdge,
-                  child: Image.asset("assets/images/unknown_person.jpg",
-                      height: 60)),
+                  child: Image.asset(profile.imgPath, height: 60)),
             ),
             const SizedBox(width: 8),
-            const Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Halwest Mohammed", style: TextStyle(fontSize: 16)),
-                SizedBox(height: 4),
-                Row(
-                  children: [
-                    SizedBox(width: 5),
-                    Text("Hallo", style: TextStyle(color: Colors.black54))
-                  ],
-                )
-              ],
-            ),
+            Text(profile.name, style: const TextStyle(fontSize: 16)),
             Expanded(
               child: Align(
-                alignment:
-                    isKurdish ? Alignment.centerLeft : Alignment.centerRight,
-                child: const Padding(
-                  padding: EdgeInsets.only(right: 5),
-                  child:
-                      Text("5m ago", style: TextStyle(color: Colors.black54)),
-                ),
+                alignment: MyTools.isKurdish
+                    ? Alignment.centerLeft
+                    : Alignment.centerRight,
+                child: Padding(
+                    padding: EdgeInsets.only(
+                        right: MyTools.isKurdish ? 0 : 5,
+                        left: MyTools.isKurdish ? 5 : 0),
+                    child: IconButton(
+                      color: Colors.purple,
+                      onPressed: () {},
+                      icon: const Icon(Icons.chat),
+                    )),
               ),
-            )
+            ),
           ],
         ),
       ),
     );
   }
-
-  bool get isKurdish => Get.locale!.languageCode == "fa" ? true : false;
 }
 
-class OnlineTab extends StatelessWidget {
-  const OnlineTab({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () async {
-        return await Future.delayed(const Duration(seconds: 1));
-      },
-      child: ListView.builder(
-          padding: const EdgeInsets.only(top: 25, left: 12, right: 12),
-          itemBuilder: (context, index) {
-            return const Column(
-              children: [OnlineTile(), Divider(color: Colors.black45)],
-            );
-          },
-          itemCount: 10),
-    );
-  }
-}
-
-class OnlineTile extends StatelessWidget {
-  const OnlineTile({super.key});
+class GlobalTabBottomSheetTile extends StatelessWidget {
+  final MiniProfile profile;
+  const GlobalTabBottomSheetTile({super.key, required this.profile});
 
   @override
   Widget build(BuildContext context) {
@@ -422,21 +491,221 @@ class OnlineTile extends StatelessWidget {
         child: Row(
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 8),
+              padding: EdgeInsets.only(
+                  left: MyTools.isKurdish ? 0 : 8,
+                  right: MyTools.isKurdish ? 8 : 0),
               child: Card(
                   shape: const CircleBorder(),
                   clipBehavior: Clip.hardEdge,
-                  child: Image.asset("assets/images/unknown_person.jpg",
-                      height: 60)),
+                  child: Image.asset(profile.imgPath, height: 60)),
+            ),
+            const SizedBox(width: 8),
+            Text(profile.name, style: const TextStyle(fontSize: 16)),
+            Expanded(
+              child: Align(
+                alignment: MyTools.isKurdish
+                    ? Alignment.centerLeft
+                    : Alignment.centerRight,
+                child: Padding(
+                    padding: EdgeInsets.only(
+                        right: MyTools.isKurdish ? 0 : 5,
+                        left: MyTools.isKurdish ? 5 : 0),
+                    child: IconButton(
+                        color: Colors.purple,
+                        onPressed: () {},
+                        icon: const Icon(Icons.person_add_alt_1))),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ChatsTab extends StatelessWidget {
+  const ChatsTab({super.key});
+
+  static List<MiniProfile> profiles = [
+    MiniProfile(
+        name: "Halmat Mohammed",
+        imgPath: MyTools.testPropic1,
+        message: "ajsdkhsakjdsaasdjksa"),
+    MiniProfile(
+        name: "Hallo Ahmed",
+        imgPath: MyTools.testPropic2,
+        message: "ajsdkhsakjdsaq9w8diok"),
+    MiniProfile(
+        name: "Halkawt Mahmood",
+        imgPath: MyTools.testPropic3,
+        message: "ajsdkhsakjdsawdhjqkd"),
+    MiniProfile(
+        name: "Halwest Hamamin",
+        imgPath: MyTools.testPropic1,
+        message: "ajsdkhsakjdsa19i2ijks"),
+    MiniProfile(
+        name: "Hallsho Mlshor",
+        imgPath: MyTools.testPropic4,
+        message: "n8e29es28y71s182u"),
+    MiniProfile(
+        name: "Halgwrd Karwan",
+        imgPath: MyTools.testPropic3,
+        message: "ajsdkhsakjdsaas9duiasojd")
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return RefreshIndicator(
+      onRefresh: () async {
+        return await Future.delayed(const Duration(seconds: 1));
+      },
+      child: ListView.builder(
+          padding: const EdgeInsets.only(top: 25, left: 12, right: 12),
+          itemBuilder: (context, index) {
+            return Column(
+              children: [
+                ChatsTile(profile: profiles[index]),
+                const Divider(color: Colors.black45),
+              ],
+            );
+          },
+          itemCount: profiles.length),
+    );
+  }
+}
+
+class ChatsTile extends StatelessWidget {
+  const ChatsTile({super.key, required this.profile});
+
+  final MiniProfile profile;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {},
+      borderRadius: BorderRadius.circular(15),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 2),
+        child: Row(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(
+                  left: MyTools.isKurdish ? 0 : 8,
+                  right: MyTools.isKurdish ? 8 : 0),
+              child: Card(
+                shape: const CircleBorder(),
+                clipBehavior: Clip.hardEdge,
+                child: Image.asset(profile.imgPath, height: 60),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(profile.name, style: const TextStyle(fontSize: 16)),
+                const SizedBox(height: 4),
+                Row(
+                  children: [
+                    const SizedBox(width: 5),
+                    Text(profile.message,
+                        style: const TextStyle(color: Colors.black54))
+                  ],
+                )
+              ],
+            ),
+            Expanded(
+              child: Align(
+                alignment: MyTools.isKurdish
+                    ? Alignment.centerLeft
+                    : Alignment.centerRight,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      right: MyTools.isKurdish ? 0 : 5,
+                      left: MyTools.isKurdish ? 5 : 0),
+                  child: const Text("5m ago",
+                      style: TextStyle(color: Colors.black54)),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class OnlineTab extends StatelessWidget {
+  const OnlineTab({super.key});
+
+  static List<MiniProfile> profiles = [
+    MiniProfile(
+        name: "Hallo Ahmed",
+        imgPath: MyTools.testPropic2,
+        message: "ajsdkhsakjdsaq9w8diok"),
+    MiniProfile(
+        name: "Halkawt Mahmood",
+        imgPath: MyTools.testPropic3,
+        message: "ajsdkhsakjdsawdhjqkd"),
+    MiniProfile(
+        name: "Hallsho Mlshor",
+        imgPath: MyTools.testPropic4,
+        message: "n8e29es28y71s182u"),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return RefreshIndicator(
+      onRefresh: () async {
+        return await Future.delayed(const Duration(seconds: 1));
+      },
+      child: ListView.builder(
+          padding: const EdgeInsets.only(top: 25, left: 12, right: 12),
+          itemBuilder: (context, index) {
+            return Column(
+              children: [
+                OnlineTile(profile: profiles[index]),
+                const Divider(color: Colors.black45)
+              ],
+            );
+          },
+          itemCount: profiles.length),
+    );
+  }
+}
+
+class OnlineTile extends StatelessWidget {
+  const OnlineTile({super.key, required this.profile});
+
+  final MiniProfile profile;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {},
+      borderRadius: BorderRadius.circular(15),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 2),
+        child: Row(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(
+                  left: MyTools.isKurdish ? 0 : 8,
+                  right: MyTools.isKurdish ? 8 : 0),
+              child: Card(
+                  shape: const CircleBorder(),
+                  clipBehavior: Clip.hardEdge,
+                  child: Image.asset(profile.imgPath, height: 60)),
             ),
             const SizedBox(width: 6),
-            const Text("Halwest Mohammed", style: TextStyle(fontSize: 17)),
+            Text(profile.name, style: const TextStyle(fontSize: 17)),
             Expanded(
               child: Padding(
                 padding: EdgeInsets.only(
-                    right: isKurdish ? 0 : 12, left: isKurdish ? 12 : 0),
+                    right: MyTools.isKurdish ? 0 : 12,
+                    left: MyTools.isKurdish ? 12 : 0),
                 child: Align(
-                    alignment: isKurdish
+                    alignment: MyTools.isKurdish
                         ? Alignment.centerLeft
                         : Alignment.centerRight,
                     child: Container(
@@ -451,6 +720,4 @@ class OnlineTile extends StatelessWidget {
       ),
     );
   }
-
-  bool get isKurdish => Get.locale!.languageCode == "fa" ? true : false;
 }

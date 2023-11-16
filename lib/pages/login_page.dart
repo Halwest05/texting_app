@@ -8,6 +8,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:texting_app/pages/home_page.dart';
+import 'package:texting_app/tools.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -208,14 +209,6 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
 
   int currentPage = 0;
 
-  bool get isKurdish {
-    if (Get.locale!.languageCode == "fa") {
-      return true;
-    }
-
-    return false;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -312,7 +305,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                 ),
                 const SizedBox(height: 10),
                 Padding(
-                  padding: isKurdish
+                  padding: MyTools.isKurdish
                       ? const EdgeInsets.only(right: 6, left: 56 + 6)
                       : const EdgeInsets.only(right: 56 + 6, left: 6),
                   child: TextField(
@@ -415,7 +408,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                 ),
                 const SizedBox(height: 10),
                 Padding(
-                  padding: isKurdish
+                  padding: MyTools.isKurdish
                       ? const EdgeInsets.only(right: 16, left: 6 + 72)
                       : const EdgeInsets.only(right: 72 + 6, left: 16),
                   child: TextField(
@@ -433,7 +426,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                 ),
                 const SizedBox(height: 5),
                 Padding(
-                  padding: isKurdish
+                  padding: MyTools.isKurdish
                       ? const EdgeInsets.only(right: 16, left: 6 + 72)
                       : const EdgeInsets.only(right: 72 + 6, left: 16),
                   child: TextField(

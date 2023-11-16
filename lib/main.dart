@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:texting_app/l10n/l10n.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:texting_app/pages/login_page.dart';
+import 'package:texting_app/tools.dart';
 
 void main() {
   runApp(const MainApp());
@@ -17,21 +18,15 @@ class MainApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         builder: (context, child) {
           return Theme(
-              data: isKurdish ? kurdishTheme() : englishTheme(), child: child!);
+            data: MyTools.isKurdish ? kurdishTheme() : englishTheme(),
+            child: child!,
+          );
         },
         home: const LoginPage(),
         supportedLocales: L10n.all,
         locale: const Locale("en"),
         theme: englishTheme(),
         localizationsDelegates: AppLocalizations.localizationsDelegates);
-  }
-
-  bool get isKurdish {
-    if (Get.locale!.languageCode == "fa") {
-      return true;
-    }
-
-    return false;
   }
 
   static ThemeData kurdishTheme() {
