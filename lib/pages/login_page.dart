@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
-import 'package:texting_app/pages/home_page.dart';
+import 'package:texting_app/pages/home_page/home.dart';
 import 'package:texting_app/tools.dart';
 
 class LoginPage extends StatefulWidget {
@@ -142,7 +142,7 @@ class _LoginPageState extends State<LoginPage> {
                             shape: const StadiumBorder(),
                             backgroundColor:
                                 const Color.fromRGBO(206, 128, 203, 1)),
-                        onPressed: () => Get.off(const HomePage()),
+                        onPressed: () => Get.off(const Home()),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 64),
                           child:
@@ -478,7 +478,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     dividerColor: Color.fromRGBO(206, 128, 203, 1),
                   ),
                   looping: true,
-                  firstDate: DateTime(1920, 12, 31),
+                  firstDate: DateTime(DateTime.now().year - 120),
                   lastDate: DateTime(DateTime.now().year - 18, 12, 31),
                 ),
                 const Divider(color: Colors.black45),

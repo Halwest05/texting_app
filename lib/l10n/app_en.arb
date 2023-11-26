@@ -31,5 +31,7 @@
     "logout": "Log Out",
     "friends": "Friends",
     "friend_requests": "Friend Requests",
-    "add_friend": "Add Friend"
+    "add_friend": "Add Friend",
+    "global": "Global",
+    "home": "Home"
 }
