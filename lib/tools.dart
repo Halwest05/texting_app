@@ -11,9 +11,10 @@ class MyTools {
 
 class MiniProfile {
   final String name;
-  final String message;
+  final String? username;
+  final String? message;
   final String imgPath;
 
   const MiniProfile(
-      {required this.name, required this.imgPath, required this.message});
+      {required this.name, required this.imgPath, this.message, this.username});
 }

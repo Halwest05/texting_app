@@ -2,44 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:texting_app/tools.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
-class FriendsTabBottomSheet extends StatefulWidget {
-  const FriendsTabBottomSheet({super.key});
+class GlobalTabBottomSheet extends StatefulWidget {
+  const GlobalTabBottomSheet({super.key});
 
   @override
-  State<FriendsTabBottomSheet> createState() => _FriendsTabBottomSheetState();
+  State<GlobalTabBottomSheet> createState() => _GlobalTabBottomSheetState();
 }
 
-class _FriendsTabBottomSheetState extends State<FriendsTabBottomSheet> {
+class _GlobalTabBottomSheetState extends State<GlobalTabBottomSheet> {
   late final TextEditingController _searchController;
-
-  static List<MiniProfile> profiles = [
-    MiniProfile(
-        name: "Halmat Mohammed",
-        imgPath: MyTools.testPropic1,
-        message: "ajsdkhsakjdsaasdjksa"),
-    MiniProfile(
-        name: "Hallo Ahmed",
-        imgPath: MyTools.testPropic2,
-        message: "ajsdkhsakjdsaq9w8diok"),
-    MiniProfile(
-        name: "Halkawt Mahmood",
-        imgPath: MyTools.testPropic3,
-        message: "ajsdkhsakjdsawdhjqkd"),
-    MiniProfile(
-        name: "Halwest Hamamin",
-        imgPath: MyTools.testPropic1,
-        message: "ajsdkhsakjdsa19i2ijks"),
-    MiniProfile(
-        name: "Hallsho Mlshor",
-        imgPath: MyTools.testPropic4,
-        message: "n8e29es28y71s182u"),
-    MiniProfile(
-        name: "Halgwrd Karwan",
-        imgPath: MyTools.testPropic3,
-        message: "ajsdkhsakjdsaas9duiasojd")
-  ];
-
-  List<MiniProfile> filteredProfiles = [];
 
   @override
   void initState() {
@@ -62,6 +33,17 @@ class _FriendsTabBottomSheetState extends State<FriendsTabBottomSheet> {
 
     super.dispose();
   }
+
+  static List<MiniProfile> profiles = [
+    MiniProfile(name: "Ahmed Mohammed", imgPath: MyTools.testPropic2),
+    MiniProfile(name: "Karwan Mhaiadin", imgPath: MyTools.testPropic3),
+    MiniProfile(name: "Abduljabar farooq", imgPath: MyTools.testPropic4),
+    MiniProfile(name: "Halwest Hamamin", imgPath: MyTools.testPropic2),
+    MiniProfile(name: "Hallsho Mlshor", imgPath: MyTools.testPropic4),
+    MiniProfile(name: "Karzhin Tanzhin", imgPath: MyTools.testPropic1)
+  ];
+
+  List<MiniProfile> filteredProfiles = [];
 
   @override
   Widget build(BuildContext context) {
@@ -86,9 +68,9 @@ class _FriendsTabBottomSheetState extends State<FriendsTabBottomSheet> {
         ),
         const Divider(color: Colors.black45),
         filteredProfiles.isEmpty && _searchController.text.isNotEmpty
-            ? const Expanded(
+            ? Expanded(
                 child: Center(
-                  child: Text("No people found..."),
+                  child: Text(AppLocalizations.of(context)!.no_ppl_found),
                 ),
               )
             : Flexible(
@@ -96,7 +78,7 @@ class _FriendsTabBottomSheetState extends State<FriendsTabBottomSheet> {
                   padding: const EdgeInsets.symmetric(horizontal: 6),
                   child: ListView.builder(
                       itemBuilder: (context, index) => Column(children: [
-                            FriendTabBottomSheetTile(
+                            GlobalTabBottomSheetTile(
                                 profile: _searchController.text.isEmpty
                                     ? profiles[index]
                                     : filteredProfiles[index]),
@@ -112,10 +94,9 @@ class _FriendsTabBottomSheetState extends State<FriendsTabBottomSheet> {
   }
 }
 
-class FriendTabBottomSheetTile extends StatelessWidget {
-  const FriendTabBottomSheetTile({super.key, required this.profile});
-
+class GlobalTabBottomSheetTile extends StatelessWidget {
   final MiniProfile profile;
+  const GlobalTabBottomSheetTile({super.key, required this.profile});
 
   @override
   Widget build(BuildContext context) {
@@ -149,10 +130,9 @@ class FriendTabBottomSheetTile extends StatelessWidget {
                       right: MyTools.isKurdish ? 0 : 5,
                       left: MyTools.isKurdish ? 5 : 0),
                   child: IconButton(
-                    color: Colors.purple,
-                    onPressed: () {},
-                    icon: const Icon(Icons.chat),
-                  )),
+                      color: Colors.purple,
+                      onPressed: () {},
+                      icon: const Icon(Icons.person_add_alt_1))),
             ),
           ],
         ),

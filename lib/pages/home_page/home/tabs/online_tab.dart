@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:texting_app/pages/home_page/home/profile_bottom_sheet.dart';
 import 'package:texting_app/tools.dart';
 
 class OnlineTab extends StatelessWidget {
@@ -6,17 +8,15 @@ class OnlineTab extends StatelessWidget {
 
   static List<MiniProfile> profiles = [
     MiniProfile(
-        name: "Hallo Ahmed",
-        imgPath: MyTools.testPropic2,
-        message: "ajsdkhsakjdsaq9w8diok"),
+        name: "Hallo Ahmed", imgPath: MyTools.testPropic2, username: "hallo20"),
     MiniProfile(
         name: "Halkawt Mahmood",
         imgPath: MyTools.testPropic3,
-        message: "ajsdkhsakjdsawdhjqkd"),
+        username: "halkawt69"),
     MiniProfile(
         name: "Hallsho Mlshor",
         imgPath: MyTools.testPropic4,
-        message: "n8e29es28y71s182u"),
+        username: "halshomlsho"),
   ];
 
   @override
@@ -48,7 +48,10 @@ class OnlineTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Get.bottomSheet(ProfileBottomSheet(profile: profile),
+            isScrollControlled: true);
+      },
       borderRadius: BorderRadius.circular(15),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 2),

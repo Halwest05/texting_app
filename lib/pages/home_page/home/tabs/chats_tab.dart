@@ -89,7 +89,7 @@ class ChatsTile extends StatelessWidget {
                     padding: EdgeInsets.only(
                         left: MyTools.isKurdish ? 0 : 5,
                         right: MyTools.isKurdish ? 5 : 0),
-                    child: Text(profile.message,
+                    child: Text(profile.message!,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(color: Colors.black54)),
                   )

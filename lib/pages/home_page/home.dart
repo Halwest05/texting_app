@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:texting_app/pages/home_page/friend_requests/friend_requests_page.dart';
 import 'package:texting_app/pages/home_page/friends/friends_page.dart';
 import 'package:texting_app/pages/home_page/home/home_page.dart';
-import 'package:texting_app/pages/home_page/home/bottom_sheet.dart';
+import 'package:texting_app/pages/home_page/home/find_people_bottom_sheet.dart';
 import 'package:texting_app/pages/login_page.dart';
 
 class Home extends StatefulWidget {

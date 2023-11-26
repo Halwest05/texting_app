@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
-import 'package:texting_app/pages/home_page/home/bottom_sheet_tabs/friends_tab.dart';
-import 'package:texting_app/pages/home_page/home/bottom_sheet_tabs/global_tab.dart';
+import 'package:texting_app/pages/home_page/home/find_people_bottom_sheet_tabs/friends_tab.dart';
+import 'package:texting_app/pages/home_page/home/find_people_bottom_sheet_tabs/global_tab.dart';
 
 class SearchBottomSheet extends StatefulWidget {
   const SearchBottomSheet({super.key});
@@ -12,7 +12,7 @@ class SearchBottomSheet extends StatefulWidget {
 }
 
 class _SearchBottomSheetState extends State<SearchBottomSheet>
-    with TickerProviderStateMixin {
+    with SingleTickerProviderStateMixin {
   late final TabController _tabController;
 
   @override
@@ -66,11 +66,7 @@ class _SearchBottomSheetState extends State<SearchBottomSheet>
           );
         },
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(25),
-            topRight: Radius.circular(25),
-          ),
-        ),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(25))),
       ),
     );
   }
