@@ -136,22 +136,23 @@ class FriendTabBottomSheetTile extends StatelessWidget {
                   child: Image.asset(profile.imgPath, height: 60)),
             ),
             const SizedBox(width: 8),
-            Text(profile.name, style: const TextStyle(fontSize: 16)),
             Expanded(
-              child: Align(
-                alignment: MyTools.isKurdish
-                    ? Alignment.centerLeft
-                    : Alignment.centerRight,
-                child: Padding(
-                    padding: EdgeInsets.only(
-                        right: MyTools.isKurdish ? 0 : 5,
-                        left: MyTools.isKurdish ? 5 : 0),
-                    child: IconButton(
-                      color: Colors.purple,
-                      onPressed: () {},
-                      icon: const Icon(Icons.chat),
-                    )),
-              ),
+                child: Text(profile.name,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 16))),
+            Align(
+              alignment: MyTools.isKurdish
+                  ? Alignment.centerLeft
+                  : Alignment.centerRight,
+              child: Padding(
+                  padding: EdgeInsets.only(
+                      right: MyTools.isKurdish ? 0 : 5,
+                      left: MyTools.isKurdish ? 5 : 0),
+                  child: IconButton(
+                    color: Colors.purple,
+                    onPressed: () {},
+                    icon: const Icon(Icons.chat),
+                  )),
             ),
           ],
         ),

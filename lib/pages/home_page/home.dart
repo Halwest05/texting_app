@@ -66,25 +66,33 @@ class _HomeState extends State<Home> {
                   padding: const EdgeInsets.only(top: 10),
                   decoration: const BoxDecoration(
                       color: Color.fromRGBO(206, 128, 203, 1)),
-                  child: Column(children: [
-                    Card(
-                      clipBehavior: Clip.antiAlias,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Image.asset("assets/images/unknown_person.jpg",
-                          height: 85),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Directionality(
+                      textDirection: TextDirection.ltr,
+                      child: Column(children: [
+                        Card(
+                          clipBehavior: Clip.antiAlias,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Image.asset("assets/images/unknown_person.jpg",
+                              height: 85),
+                        ),
+                        const Text(
+                          "Halwest Mohammed",
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        const SizedBox(height: 2),
+                        const Text(
+                          "hallo05",
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(color: Colors.black54),
+                        )
+                      ]),
                     ),
-                    const Text(
-                      "Halwest Mohammed",
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    const SizedBox(height: 2),
-                    const Text(
-                      "hallo05",
-                      style: TextStyle(color: Colors.black54),
-                    )
-                  ])),
+                  )),
             ),
             ListTile(
                 title: Text(AppLocalizations.of(context)!.home),

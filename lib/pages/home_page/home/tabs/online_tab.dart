@@ -64,22 +64,26 @@ class OnlineTile extends StatelessWidget {
                   child: Image.asset(profile.imgPath, height: 60)),
             ),
             const SizedBox(width: 6),
-            Text(profile.name, style: const TextStyle(fontSize: 17)),
             Expanded(
-              child: Padding(
-                padding: EdgeInsets.only(
-                    right: MyTools.isKurdish ? 0 : 12,
-                    left: MyTools.isKurdish ? 12 : 0),
-                child: Align(
-                    alignment: MyTools.isKurdish
-                        ? Alignment.centerLeft
-                        : Alignment.centerRight,
-                    child: Container(
-                        height: 12,
-                        width: 12,
-                        decoration: const BoxDecoration(
-                            shape: BoxShape.circle, color: Colors.green))),
+              child: Text(
+                profile.name,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 17),
               ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                  right: MyTools.isKurdish ? 0 : 12,
+                  left: MyTools.isKurdish ? 12 : 0),
+              child: Align(
+                  alignment: MyTools.isKurdish
+                      ? Alignment.centerLeft
+                      : Alignment.centerRight,
+                  child: Container(
+                      height: 12,
+                      width: 12,
+                      decoration: const BoxDecoration(
+                          shape: BoxShape.circle, color: Colors.green))),
             )
           ],
         ),

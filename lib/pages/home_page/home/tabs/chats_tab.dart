@@ -77,33 +77,35 @@ class ChatsTile extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 8),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(profile.name, style: const TextStyle(fontSize: 16)),
-                const SizedBox(height: 4),
-                Row(
-                  children: [
-                    const SizedBox(width: 5),
-                    Text(profile.message,
-                        style: const TextStyle(color: Colors.black54))
-                  ],
-                )
-              ],
-            ),
             Expanded(
-              child: Align(
-                alignment: MyTools.isKurdish
-                    ? Alignment.centerLeft
-                    : Alignment.centerRight,
-                child: Padding(
-                  padding: EdgeInsets.only(
-                      right: MyTools.isKurdish ? 0 : 5,
-                      left: MyTools.isKurdish ? 5 : 0),
-                  child: const Text("5m ago",
-                      style: TextStyle(color: Colors.black54)),
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(profile.name,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontSize: 16)),
+                  const SizedBox(height: 4),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        left: MyTools.isKurdish ? 0 : 5,
+                        right: MyTools.isKurdish ? 5 : 0),
+                    child: Text(profile.message,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(color: Colors.black54)),
+                  )
+                ],
+              ),
+            ),
+            Align(
+              alignment: MyTools.isKurdish
+                  ? Alignment.centerLeft
+                  : Alignment.centerRight,
+              child: Padding(
+                padding: EdgeInsets.only(
+                    right: MyTools.isKurdish ? 0 : 5,
+                    left: MyTools.isKurdish ? 5 : 0),
+                child: const Text("5m ago",
+                    style: TextStyle(color: Colors.black54)),
               ),
             )
           ],

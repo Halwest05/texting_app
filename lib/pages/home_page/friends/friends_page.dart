@@ -55,21 +55,22 @@ class FriendsPageTile extends StatelessWidget {
                   child: Image.asset(profile.imgPath, height: 60)),
             ),
             const SizedBox(width: 6),
-            Text(profile.name, style: const TextStyle(fontSize: 17)),
             Expanded(
-              child: Padding(
-                padding: EdgeInsets.only(
-                    right: MyTools.isKurdish ? 0 : 8,
-                    left: MyTools.isKurdish ? 8 : 0),
-                child: Align(
-                    alignment: MyTools.isKurdish
-                        ? Alignment.centerLeft
-                        : Alignment.centerRight,
-                    child: IconButton(
-                        color: Colors.purple,
-                        onPressed: () {},
-                        icon: const Icon(Icons.person_remove_rounded))),
-              ),
+                child: Text(profile.name,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 17))),
+            Padding(
+              padding: EdgeInsets.only(
+                  right: MyTools.isKurdish ? 0 : 8,
+                  left: MyTools.isKurdish ? 8 : 0),
+              child: Align(
+                  alignment: MyTools.isKurdish
+                      ? Alignment.centerLeft
+                      : Alignment.centerRight,
+                  child: IconButton(
+                      color: Colors.purple,
+                      onPressed: () {},
+                      icon: const Icon(Icons.person_remove_rounded))),
             )
           ],
         ),
