@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:texting_app/pages/home_page/home/profile_bottom_sheet.dart';
+import 'package:texting_app/pages/home_page/profile_bottom_sheet.dart';
 import 'package:texting_app/tools.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 

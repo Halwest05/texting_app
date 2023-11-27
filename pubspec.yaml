@@ -7,6 +7,7 @@ environment:
   sdk: '>=3.1.5 <4.0.0'
 
 dependencies:
+  badges:
   get:
   flutter_holo_date_picker:
   image_picker:

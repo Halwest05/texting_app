@@ -61,8 +61,7 @@ class _LoginPageState extends State<LoginPage> {
                   padding: const EdgeInsets.only(top: 16),
                   child: Card(
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(60),
-                    ),
+                        borderRadius: BorderRadius.circular(60)),
                     clipBehavior: Clip.antiAlias,
                     child: Image.asset(
                       "assets/images/stay_connected.jpg",

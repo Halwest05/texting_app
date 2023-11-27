@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:texting_app/pages/home_page/stranger_profile_bottom_sheet.dart';
 import 'package:texting_app/tools.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
@@ -35,12 +37,30 @@ class _GlobalTabBottomSheetState extends State<GlobalTabBottomSheet> {
   }
 
   static List<MiniProfile> profiles = [
-    MiniProfile(name: "Ahmed Mohammed", imgPath: MyTools.testPropic2),
-    MiniProfile(name: "Karwan Mhaiadin", imgPath: MyTools.testPropic3),
-    MiniProfile(name: "Abduljabar farooq", imgPath: MyTools.testPropic4),
-    MiniProfile(name: "Halwest Hamamin", imgPath: MyTools.testPropic2),
-    MiniProfile(name: "Hallsho Mlshor", imgPath: MyTools.testPropic4),
-    MiniProfile(name: "Karzhin Tanzhin", imgPath: MyTools.testPropic1)
+    MiniProfile(
+        name: "Ahmed Mohammed",
+        imgPath: MyTools.testPropic2,
+        username: "ahmed"),
+    MiniProfile(
+        name: "Karwan Mhaiadin",
+        imgPath: MyTools.testPropic3,
+        username: "karwan123"),
+    MiniProfile(
+        name: "Abduljabar farooq",
+        imgPath: MyTools.testPropic4,
+        username: "jabarfarooq"),
+    MiniProfile(
+        name: "Halwest Hamamin",
+        imgPath: MyTools.testPropic2,
+        username: "halwest05"),
+    MiniProfile(
+        name: "Hallsho Mlshor",
+        imgPath: MyTools.testPropic4,
+        username: "halsho69"),
+    MiniProfile(
+        name: "Karzhin Tanzhin",
+        imgPath: MyTools.testPropic1,
+        username: "karzhin09")
   ];
 
   List<MiniProfile> filteredProfiles = [];
@@ -101,7 +121,10 @@ class GlobalTabBottomSheetTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Get.bottomSheet(StrangerProfileBottomSheet(profile: profile),
+            isScrollControlled: true);
+      },
       borderRadius: BorderRadius.circular(15),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 2),

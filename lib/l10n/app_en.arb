@@ -37,5 +37,9 @@
     "no_ppl_found": "No people found...",
     "message": "Message",
     "unfriend": "Unfriend",
-    "block": "Block"
+    "block": "Block",
+    "accept": "Accept",
+    "reject": "Reject",
+    "send_request": "Send Request",
+    "copy_id": "Copy ID"
 }

@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:texting_app/pages/home_page/friend_request_profile_bottom_sheet.dart';
 import 'package:texting_app/tools.dart';
 
 class FriendRequestsPage extends StatelessWidget {
-  const FriendRequestsPage({super.key});
-
-  static final List<MiniProfile> profiles = [
-    MiniProfile(name: "Karwan ASDhkja", imgPath: MyTools.testPropic2),
-    MiniProfile(name: "Karzan 912djiaw", imgPath: MyTools.testPropic4),
-    MiniProfile(name: "Kardin 218ejq", imgPath: MyTools.testPropic3),
-    MiniProfile(name: "Karkwzh as9du8sa", imgPath: MyTools.testPropic1),
-  ];
+  final List<MiniProfile> profiles;
+  const FriendRequestsPage({super.key, required this.profiles});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +31,10 @@ class FriendRequestsPageTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Get.bottomSheet(FriendRequestProfileBottomSheet(profile: profile),
+            isScrollControlled: true);
+      },
       borderRadius: BorderRadius.circular(15),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 2),

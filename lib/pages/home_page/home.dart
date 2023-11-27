@@ -6,6 +6,7 @@ import 'package:texting_app/pages/home_page/friends/friends_page.dart';
 import 'package:texting_app/pages/home_page/home/home_page.dart';
 import 'package:texting_app/pages/home_page/home/find_people_bottom_sheet.dart';
 import 'package:texting_app/pages/login_page.dart';
+import 'package:texting_app/tools.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -35,6 +36,25 @@ class _HomeState extends State<Home> {
 
   int currentHomePage = 0;
   int currentPage = 0;
+
+  static final List<MiniProfile> friendRequestProfiles = [
+    MiniProfile(
+        name: "Karwan ASDhkja",
+        imgPath: MyTools.testPropic2,
+        username: "karwanadhd"),
+    MiniProfile(
+        name: "Karzan 912djiaw",
+        imgPath: MyTools.testPropic4,
+        username: "xkarzanx"),
+    MiniProfile(
+        name: "Kardin 218ejq",
+        imgPath: MyTools.testPropic3,
+        username: "karreligion"),
+    MiniProfile(
+        name: "Karkwzh as9du8sa",
+        imgPath: MyTools.testPropic1,
+        username: "kar98k"),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +135,16 @@ class _HomeState extends State<Home> {
             const Divider(color: Colors.black45),
             ListTile(
                 title: Text(AppLocalizations.of(context)!.friend_requests),
-                leading: const Icon(Icons.person_add),
+                leading: Badge(
+                    backgroundColor: Colors.red,
+                    alignment: MyTools.isKurdish
+                        ? Alignment.topRight
+                        : Alignment.topLeft,
+                    offset: MyTools.isKurdish
+                        ? const Offset(8, -4)
+                        : const Offset(-2, -5),
+                    label: Text(friendRequestProfiles.length.toString()),
+                    child: const Icon(Icons.person_add)),
                 onTap: () => setState(() {
                       currentPage = 2;
                       currentHomePage = 0;
@@ -177,7 +206,7 @@ class _HomeState extends State<Home> {
             case 1:
               return const FriendsPage();
             case 2:
-              return const FriendRequestsPage();
+              return FriendRequestsPage(profiles: friendRequestProfiles);
             default:
               return Container();
           }
