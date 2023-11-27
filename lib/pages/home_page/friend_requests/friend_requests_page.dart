@@ -5,20 +5,16 @@ class FriendRequestsPage extends StatelessWidget {
   const FriendRequestsPage({super.key});
 
   static final List<MiniProfile> profiles = [
-    MiniProfile(
-        name: "Karwan ASDhkja", imgPath: MyTools.testPropic2, message: ""),
-    MiniProfile(
-        name: "Karzan 912djiaw", imgPath: MyTools.testPropic4, message: ""),
-    MiniProfile(
-        name: "Kardin 218ejq", imgPath: MyTools.testPropic3, message: ""),
-    MiniProfile(
-        name: "Karkwzh as9du8sa", imgPath: MyTools.testPropic1, message: ""),
+    MiniProfile(name: "Karwan ASDhkja", imgPath: MyTools.testPropic2),
+    MiniProfile(name: "Karzan 912djiaw", imgPath: MyTools.testPropic4),
+    MiniProfile(name: "Kardin 218ejq", imgPath: MyTools.testPropic3),
+    MiniProfile(name: "Karkwzh as9du8sa", imgPath: MyTools.testPropic1),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 25, left: 12, right: 12),
+      padding: const EdgeInsets.only(top: 25, left: 8, right: 8),
       child: ListView.builder(
           itemBuilder: (context, index) => Column(
                 children: [
@@ -59,18 +55,27 @@ class FriendRequestsPageTile extends StatelessWidget {
                 child: Text(profile.name,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(fontSize: 17))),
-            Padding(
-              padding: EdgeInsets.only(
-                  right: MyTools.isKurdish ? 0 : 8,
-                  left: MyTools.isKurdish ? 8 : 0),
-              child: Align(
-                  alignment: MyTools.isKurdish
-                      ? Alignment.centerLeft
-                      : Alignment.centerRight,
-                  child: IconButton(
-                      color: Colors.purple,
-                      onPressed: () {},
-                      icon: const Icon(Icons.person_add_rounded))),
+            Row(
+              children: [
+                InkWell(
+                  borderRadius: BorderRadius.circular(50),
+                  onTap: () {},
+                  child: const Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: Icon(Icons.person_remove_rounded,
+                        color: Colors.red, size: 28),
+                  ),
+                ),
+                InkWell(
+                  borderRadius: BorderRadius.circular(50),
+                  onTap: () {},
+                  child: const Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: Icon(Icons.person_add_rounded,
+                        color: Colors.green, size: 28),
+                  ),
+                )
+              ],
             )
           ],
         ),

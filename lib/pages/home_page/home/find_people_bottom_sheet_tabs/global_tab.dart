@@ -131,6 +131,7 @@ class GlobalTabBottomSheetTile extends StatelessWidget {
                       left: MyTools.isKurdish ? 5 : 0),
                   child: IconButton(
                       color: Colors.purple,
+                      iconSize: 28,
                       onPressed: () {},
                       icon: const Icon(Icons.person_add_alt_1))),
             ),

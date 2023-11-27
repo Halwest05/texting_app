@@ -1,22 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:texting_app/pages/home_page/home/profile_bottom_sheet.dart';
 import 'package:texting_app/tools.dart';
 
 class OnlineTab extends StatelessWidget {
   const OnlineTab({super.key});
 
   static List<MiniProfile> profiles = [
-    MiniProfile(
-        name: "Hallo Ahmed", imgPath: MyTools.testPropic2, username: "hallo20"),
-    MiniProfile(
-        name: "Halkawt Mahmood",
-        imgPath: MyTools.testPropic3,
-        username: "halkawt69"),
-    MiniProfile(
-        name: "Hallsho Mlshor",
-        imgPath: MyTools.testPropic4,
-        username: "halshomlsho"),
+    MiniProfile(name: "Hallo Ahmed", imgPath: MyTools.testPropic2),
+    MiniProfile(name: "Halkawt Mahmood", imgPath: MyTools.testPropic3),
+    MiniProfile(name: "Hallsho Mlshor", imgPath: MyTools.testPropic4),
   ];
 
   @override
@@ -26,7 +17,7 @@ class OnlineTab extends StatelessWidget {
         return await Future.delayed(const Duration(seconds: 1));
       },
       child: ListView.builder(
-          padding: const EdgeInsets.only(top: 25, left: 12, right: 12),
+          padding: const EdgeInsets.only(top: 25, left: 8, right: 8),
           itemBuilder: (context, index) {
             return Column(
               children: [
@@ -48,10 +39,7 @@ class OnlineTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        Get.bottomSheet(ProfileBottomSheet(profile: profile),
-            isScrollControlled: true);
-      },
+      onTap: () {},
       borderRadius: BorderRadius.circular(15),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 2),

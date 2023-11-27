@@ -12,6 +12,7 @@ class ProfileBottomSheet extends StatefulWidget {
 
 class _ProfileBottomSheetState extends State<ProfileBottomSheet> {
   bool isFav = false;
+  int favCount = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -51,18 +52,36 @@ class _ProfileBottomSheetState extends State<ProfileBottomSheet> {
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                 Padding(
                   padding: EdgeInsets.only(
-                      left: MyTools.isKurdish ? 0 : 5,
-                      right: MyTools.isKurdish ? 5 : 0),
-                  child: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          isFav = !isFav;
-                        });
-                      },
-                      icon:
-                          Icon(isFav ? Icons.favorite : Icons.favorite_border),
-                      color: Colors.pinkAccent,
-                      iconSize: isFav ? 36 : 32),
+                      left: MyTools.isKurdish ? 0 : 12,
+                      right: MyTools.isKurdish ? 12 : 0),
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(25),
+                    onTap: () {
+                      if (isFav) {
+                        favCount--;
+                      } else {
+                        favCount++;
+                      }
+
+                      setState(() {
+                        isFav = !isFav;
+                      });
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 2),
+                      child: Column(
+                        children: [
+                          isFav
+                              ? const Icon(Icons.favorite,
+                                  color: Colors.pinkAccent, size: 36)
+                              : const Icon(Icons.favorite_border,
+                                  color: Colors.pinkAccent, size: 32),
+                          Text(favCount.toString())
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
                 Padding(
                   padding: EdgeInsets.only(

@@ -38,7 +38,7 @@ class ChatsTab extends StatelessWidget {
         return await Future.delayed(const Duration(seconds: 1));
       },
       child: ListView.builder(
-          padding: const EdgeInsets.only(top: 25, left: 12, right: 12),
+          padding: const EdgeInsets.only(top: 25, left: 8, right: 8),
           itemBuilder: (context, index) {
             return Column(
               children: [

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:texting_app/pages/home_page/home/profile_bottom_sheet.dart';
 import 'package:texting_app/tools.dart';
 
 class FriendsPage extends StatelessWidget {
@@ -6,19 +8,27 @@ class FriendsPage extends StatelessWidget {
 
   static final List<MiniProfile> profiles = [
     MiniProfile(
-        name: "Hallo Mohammed", imgPath: MyTools.testPropic1, message: ""),
+        name: "Hallo Mohammed",
+        imgPath: MyTools.testPropic1,
+        username: "hallo20"),
     MiniProfile(
-        name: "Halmat Mahmood", imgPath: MyTools.testPropic3, message: ""),
+        name: "Halmat Mahmood",
+        imgPath: MyTools.testPropic3,
+        username: "halmat10"),
     MiniProfile(
-        name: "Halkawt Ahmed", imgPath: MyTools.testPropic4, message: ""),
+        name: "Halkawt Ahmed",
+        imgPath: MyTools.testPropic4,
+        username: "halkawt69"),
     MiniProfile(
-        name: "Hallgwrd Salahaddin", imgPath: MyTools.testPropic2, message: ""),
+        name: "Hallgwrd Salahaddin",
+        imgPath: MyTools.testPropic2,
+        username: "halgwrd12"),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 25, left: 12, right: 12),
+      padding: const EdgeInsets.only(top: 25, left: 8, right: 8),
       child: ListView.builder(
           itemBuilder: (context, index) => Column(
                 children: [
@@ -39,7 +49,10 @@ class FriendsPageTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Get.bottomSheet(ProfileBottomSheet(profile: profile),
+            isScrollControlled: true);
+      },
       borderRadius: BorderRadius.circular(15),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 2),
@@ -59,19 +72,6 @@ class FriendsPageTile extends StatelessWidget {
                 child: Text(profile.name,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(fontSize: 17))),
-            Padding(
-              padding: EdgeInsets.only(
-                  right: MyTools.isKurdish ? 0 : 8,
-                  left: MyTools.isKurdish ? 8 : 0),
-              child: Align(
-                  alignment: MyTools.isKurdish
-                      ? Alignment.centerLeft
-                      : Alignment.centerRight,
-                  child: IconButton(
-                      color: Colors.purple,
-                      onPressed: () {},
-                      icon: const Icon(Icons.person_remove_rounded))),
-            )
           ],
         ),
       ),

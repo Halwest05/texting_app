@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:texting_app/pages/home_page/home/profile_bottom_sheet.dart';
 import 'package:texting_app/tools.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
@@ -13,12 +15,28 @@ class _FriendsTabBottomSheetState extends State<FriendsTabBottomSheet> {
   late final TextEditingController _searchController;
 
   static List<MiniProfile> profiles = [
-    MiniProfile(name: "Halmat Mohammed", imgPath: MyTools.testPropic1),
-    MiniProfile(name: "Hallo Ahmed", imgPath: MyTools.testPropic2),
-    MiniProfile(name: "Halkawt Mahmood", imgPath: MyTools.testPropic3),
-    MiniProfile(name: "Halwest Hamamin", imgPath: MyTools.testPropic1),
-    MiniProfile(name: "Hallsho Mlshor", imgPath: MyTools.testPropic4),
-    MiniProfile(name: "Halgwrd Karwan", imgPath: MyTools.testPropic3)
+    MiniProfile(
+        name: "Halmat Mohammed",
+        imgPath: MyTools.testPropic1,
+        username: "halmat10"),
+    MiniProfile(
+        name: "Hallo Ahmed", imgPath: MyTools.testPropic2, username: "hallo20"),
+    MiniProfile(
+        name: "Halkawt Mahmood",
+        imgPath: MyTools.testPropic3,
+        username: "halkawt69"),
+    MiniProfile(
+        name: "Halwest Hamamin",
+        imgPath: MyTools.testPropic1,
+        username: "halwest12"),
+    MiniProfile(
+        name: "Hallsho Mlshor",
+        imgPath: MyTools.testPropic4,
+        username: "halshomlsho"),
+    MiniProfile(
+        name: "Halgwrd Karwan",
+        imgPath: MyTools.testPropic3,
+        username: "halgwrd90")
   ];
 
   List<MiniProfile> filteredProfiles = [];
@@ -102,7 +120,10 @@ class FriendTabBottomSheetTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Get.bottomSheet(ProfileBottomSheet(profile: profile),
+            isScrollControlled: true);
+      },
       borderRadius: BorderRadius.circular(15),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 2),
@@ -132,6 +153,7 @@ class FriendTabBottomSheetTile extends StatelessWidget {
                       left: MyTools.isKurdish ? 5 : 0),
                   child: IconButton(
                     color: Colors.purple,
+                    iconSize: 28,
                     onPressed: () {},
                     icon: const Icon(Icons.chat),
                   )),
