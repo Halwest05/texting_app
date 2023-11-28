@@ -15,7 +15,7 @@ class ChatsTab extends StatelessWidget {
     MiniProfile(
         name: "Hallo Ahmed",
         imgPath: MyTools.testPropic2,
-        message: "ajsdkhsakjdsaq9w8diok",
+        message: "ajsdkhsakjdsaq9w8diok aaksdha",
         username: "hallo20"),
     MiniProfile(
         name: "Halkawt Mahmood",
@@ -41,22 +41,17 @@ class ChatsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () async {
-        return await Future.delayed(const Duration(seconds: 1));
-      },
-      child: ListView.builder(
-          padding: const EdgeInsets.only(top: 25, left: 8, right: 8),
-          itemBuilder: (context, index) {
-            return Column(
-              children: [
-                ChatsTile(profile: profiles[index]),
-                const Divider(color: Colors.black45),
-              ],
-            );
-          },
-          itemCount: profiles.length),
-    );
+    return ListView.builder(
+        padding: const EdgeInsets.only(top: 25, left: 4, right: 4),
+        itemBuilder: (context, index) {
+          return Column(
+            children: [
+              ChatsTile(profile: profiles[index]),
+              const Divider(color: Colors.black45),
+            ],
+          );
+        },
+        itemCount: profiles.length);
   }
 }
 

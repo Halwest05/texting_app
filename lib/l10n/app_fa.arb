@@ -41,5 +41,7 @@
     "accept": "ڕازیبوون",
     "reject": "ڕەفزکردن",
     "send_request": "داخوازی ناردن",
-    "copy_id": "کۆپی ID"
+    "copy_id": "کۆپی ID",
+    "active_now": "لەسەر هێڵە",
+    "type_a_msg": "نامەیەک بنووسە..."
 }

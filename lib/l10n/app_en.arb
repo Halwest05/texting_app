@@ -41,5 +41,7 @@
     "accept": "Accept",
     "reject": "Reject",
     "send_request": "Send Request",
-    "copy_id": "Copy ID"
+    "copy_id": "Copy ID",
+    "active_now": "Active now",
+    "type_a_msg": "Type a message..."
 }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:texting_app/pages/chat_page.dart';
 import 'package:texting_app/tools.dart';
 
 class OnlineTab extends StatelessWidget {
@@ -24,7 +26,7 @@ class OnlineTab extends StatelessWidget {
         return await Future.delayed(const Duration(seconds: 1));
       },
       child: ListView.builder(
-          padding: const EdgeInsets.only(top: 25, left: 8, right: 8),
+          padding: const EdgeInsets.only(top: 25, left: 4, right: 4),
           itemBuilder: (context, index) {
             return Column(
               children: [
@@ -46,7 +48,11 @@ class OnlineTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Get.to(ChatPage(profile: profile),
+            transition: Transition.fade,
+            duration: const Duration(milliseconds: 200));
+      },
       borderRadius: BorderRadius.circular(15),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 2),

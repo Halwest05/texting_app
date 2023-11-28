@@ -169,7 +169,7 @@ class _HomeState extends State<Home> {
                                 onPressed: () => Get.off(const LoginPage()),
                                 child: Text(AppLocalizations.of(context)!.yes))
                           ],
-                        )))
+                        ))),
           ],
         ),
       ),

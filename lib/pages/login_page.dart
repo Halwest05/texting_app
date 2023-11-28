@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:texting_app/pages/home_page/home.dart';
 import 'package:texting_app/tools.dart';
 
@@ -20,6 +21,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   bool passIsVis = false;
 
+  SharedPreferences? sharedPreferences;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +35,11 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   GestureDetector(
-                    onTap: () {
+                    onTap: () async {
+                      sharedPreferences ??=
+                          await SharedPreferences.getInstance();
+
+                      sharedPreferences!.setString("lang", "en");
                       Get.updateLocale(const Locale("en"));
                     },
                     child: Card(
@@ -43,7 +50,11 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {
+                    onTap: () async {
+                      sharedPreferences ??=
+                          await SharedPreferences.getInstance();
+
+                      sharedPreferences!.setString("lang", "fa");
                       Get.updateLocale(const Locale("fa"));
                     },
                     child: Card(
