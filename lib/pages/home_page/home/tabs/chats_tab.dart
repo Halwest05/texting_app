@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:texting_app/pages/chat_page.dart';
 import 'package:texting_app/tools.dart';
 
 class ChatsTab extends StatelessWidget {
@@ -8,27 +10,33 @@ class ChatsTab extends StatelessWidget {
     MiniProfile(
         name: "Halmat Mohammed",
         imgPath: MyTools.testPropic1,
-        message: "ajsdkhsakjdsaasdjksa"),
+        message: "ajsdkhsakjdsaasdjksa",
+        username: "halmat10"),
     MiniProfile(
         name: "Hallo Ahmed",
         imgPath: MyTools.testPropic2,
-        message: "ajsdkhsakjdsaq9w8diok"),
+        message: "ajsdkhsakjdsaq9w8diok",
+        username: "hallo20"),
     MiniProfile(
         name: "Halkawt Mahmood",
         imgPath: MyTools.testPropic3,
-        message: "ajsdkhsakjdsawdhjqkd"),
+        message: "ajsdkhsakjdsawdhjqkd",
+        username: "halkawt69"),
     MiniProfile(
         name: "Halwest Hamamin",
         imgPath: MyTools.testPropic1,
-        message: "ajsdkhsakjdsa19i2ijks"),
+        message: "ajsdkhsakjdsa19i2ijks",
+        username: "halwest12"),
     MiniProfile(
         name: "Hallsho Mlshor",
         imgPath: MyTools.testPropic4,
-        message: "n8e29es28y71s182u"),
+        message: "n8e29es28y71s182u",
+        username: "halshomlshor"),
     MiniProfile(
         name: "Halgwrd Karwan",
         imgPath: MyTools.testPropic3,
-        message: "ajsdkhsakjdsaas9duiasojd")
+        message: "ajsdkhsakjdsaas9duiasojd",
+        username: "halgwrd01")
   ];
 
   @override
@@ -60,7 +68,11 @@ class ChatsTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Get.to(ChatPage(profile: profile),
+            transition: Transition.fade,
+            duration: const Duration(milliseconds: 200));
+      },
       borderRadius: BorderRadius.circular(15),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 2),
@@ -76,7 +88,6 @@ class ChatsTile extends StatelessWidget {
                 child: Image.asset(profile.imgPath, height: 60),
               ),
             ),
-            const SizedBox(width: 8),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

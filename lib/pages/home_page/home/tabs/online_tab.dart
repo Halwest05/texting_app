@@ -5,9 +5,16 @@ class OnlineTab extends StatelessWidget {
   const OnlineTab({super.key});
 
   static List<MiniProfile> profiles = [
-    MiniProfile(name: "Hallo Ahmed", imgPath: MyTools.testPropic2),
-    MiniProfile(name: "Halkawt Mahmood", imgPath: MyTools.testPropic3),
-    MiniProfile(name: "Hallsho Mlshor", imgPath: MyTools.testPropic4),
+    MiniProfile(
+        name: "Hallo Ahmed", imgPath: MyTools.testPropic2, username: "hallo20"),
+    MiniProfile(
+        name: "Halkawt Mahmood",
+        imgPath: MyTools.testPropic3,
+        username: "halkawt69"),
+    MiniProfile(
+        name: "Hallsho Mlshor",
+        imgPath: MyTools.testPropic4,
+        username: "halshomlshor"),
   ];
 
   @override
@@ -54,7 +61,6 @@ class OnlineTile extends StatelessWidget {
                   clipBehavior: Clip.hardEdge,
                   child: Image.asset(profile.imgPath, height: 60)),
             ),
-            const SizedBox(width: 6),
             Expanded(
               child: Text(
                 profile.name,

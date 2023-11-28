@@ -17,7 +17,7 @@ class _ProfileBottomSheetState extends State<ProfileBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 420,
+      height: 430,
       child: BottomSheet(
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(top: Radius.circular(25))),

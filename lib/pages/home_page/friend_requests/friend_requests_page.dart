@@ -49,7 +49,6 @@ class FriendRequestsPageTile extends StatelessWidget {
                   clipBehavior: Clip.hardEdge,
                   child: Image.asset(profile.imgPath, height: 60)),
             ),
-            const SizedBox(width: 6),
             Expanded(
                 child: Text(profile.name,
                     overflow: TextOverflow.ellipsis,

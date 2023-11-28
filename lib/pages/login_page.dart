@@ -599,7 +599,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                 ]),
                 const Divider(color: Colors.black45),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () => Get.off(const Home()),
                   style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromRGBO(206, 128, 203, 1),
                       shape: const StadiumBorder()),

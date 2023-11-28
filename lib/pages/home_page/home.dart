@@ -63,9 +63,7 @@ class _HomeState extends State<Home> {
         title: Text(name, overflow: TextOverflow.ellipsis),
         centerTitle: true,
         shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(20),
-                bottomRight: Radius.circular(20))),
+            borderRadius: BorderRadius.vertical(bottom: Radius.circular(20))),
       ),
       floatingActionButton: currentPage == 0 && currentHomePage == 0
           ? FloatingActionButton(
@@ -138,11 +136,11 @@ class _HomeState extends State<Home> {
                 leading: Badge(
                     backgroundColor: Colors.red,
                     alignment: MyTools.isKurdish
-                        ? Alignment.topRight
-                        : Alignment.topLeft,
+                        ? Alignment.topLeft
+                        : Alignment.topRight,
                     offset: MyTools.isKurdish
-                        ? const Offset(8, -4)
-                        : const Offset(-2, -5),
+                        ? const Offset(-3, -8)
+                        : const Offset(8, -5),
                     label: Text(friendRequestProfiles.length.toString()),
                     child: const Icon(Icons.person_add)),
                 onTap: () => setState(() {
