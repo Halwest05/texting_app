@@ -60,7 +60,23 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(name, overflow: TextOverflow.ellipsis),
+        title: Builder(builder: (context) {
+          late String appbarText;
+
+          switch (currentPage) {
+            case 0:
+              appbarText = name;
+              break;
+            case 1:
+              appbarText = AppLocalizations.of(context)!.friends;
+              break;
+            case 2:
+              appbarText = AppLocalizations.of(context)!.friend_requests;
+              break;
+          }
+
+          return Text(appbarText, overflow: TextOverflow.ellipsis);
+        }),
         centerTitle: true,
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(bottom: Radius.circular(20))),

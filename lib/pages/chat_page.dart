@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart' as intl;
-import 'package:texting_app/pages/home_page/profile_bottom_sheet.dart';
+import 'package:texting_app/pages/home_page/friend_profile_bottom_sheet.dart';
 import 'package:texting_app/tools.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
@@ -126,6 +126,8 @@ class _ChatPageState extends State<ChatPage> {
                           imgPath: "",
                           message: _chatController.text,
                           isSelf: true));
+                      _listKey.currentState!.insertItem(messages.length - 1,
+                          duration: const Duration(milliseconds: 400));
 
                       _chatController.clear();
                       _chatFocusNode.unfocus();
@@ -150,9 +152,14 @@ class _ChatPageState extends State<ChatPage> {
               borderRadius: BorderRadius.vertical(bottom: Radius.circular(20))),
           title: InkWell(
             customBorder: const StadiumBorder(),
-            onTap: () {
-              Get.bottomSheet(ProfileBottomSheet(profile: widget.profile),
+            onTap: () async {
+              String? res = await Get.bottomSheet(
+                  FriendProfileBottomSheet(profile: widget.profile),
                   isScrollControlled: true);
+
+              if (res == "unfriend" || res == "block") {
+                Get.back();
+              }
             },
             child: Padding(
               padding: EdgeInsets.only(
@@ -163,13 +170,13 @@ class _ChatPageState extends State<ChatPage> {
                     clipBehavior: Clip.antiAlias,
                     shape: const CircleBorder(),
                     elevation: 3,
-                    child: Image.asset(widget.profile.imgPath, height: 48)),
+                    child: Image.asset(widget.profile.imgPath, height: 45)),
                 Flexible(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(widget.profile.name,
-                          style: const TextStyle(fontSize: 16),
+                          style: const TextStyle(fontSize: 14),
                           overflow: TextOverflow.ellipsis),
                       Padding(
                         padding: EdgeInsets.only(
@@ -177,7 +184,7 @@ class _ChatPageState extends State<ChatPage> {
                             right: MyTools.isKurdish ? 4 : 0),
                         child: Text(AppLocalizations.of(context)!.active_now,
                             style: const TextStyle(
-                                fontSize: 13, color: Colors.green),
+                                fontSize: 12, color: Colors.green),
                             overflow: TextOverflow.ellipsis),
                       )
                     ],
@@ -205,15 +212,24 @@ class _ChatPageState extends State<ChatPage> {
         ),
         body: Directionality(
           textDirection: TextDirection.ltr,
-          child: ListView.builder(
+          child: AnimatedList(
+              key: _listKey,
+              initialItemCount: messages.length,
               padding: const EdgeInsets.only(top: 6),
-              itemBuilder: (context, index) =>
-                  MessageCard(msg: messages[index]),
-              itemCount: messages.length),
+              itemBuilder: (context, index, animation) => SlideTransition(
+                  position: animation.drive(Tween(
+                          begin: messages.last.isSelf
+                              ? const Offset(1, 0)
+                              : const Offset(-1, 0),
+                          end: const Offset(0, 0))
+                      .chain(CurveTween(curve: Curves.easeOut))),
+                  child: MessageCard(msg: messages[index]))),
         ),
       ),
     );
   }
+
+  final GlobalKey<AnimatedListState> _listKey = GlobalKey();
 
   List<Message> messages = [];
 }
@@ -303,17 +319,4 @@ class MessageCard extends StatelessWidget {
       ),
     );
   }
-}
-
-class Message {
-  final String name;
-  final String message;
-  final String imgPath;
-  final bool isSelf;
-
-  const Message(
-      {required this.name,
-      required this.imgPath,
-      required this.message,
-      required this.isSelf});
 }

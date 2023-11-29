@@ -43,5 +43,9 @@
     "send_request": "Send Request",
     "copy_id": "Copy ID",
     "active_now": "Active now",
-    "type_a_msg": "Type a message..."
+    "type_a_msg": "Type a message...",
+    "do_u_wanna_unfriend": "Do you want to unfriend?",
+    "do_u_wanna_block": "Do you want to block?",
+    "copied_to_clipbrd": "Copied to clipboard",
+    "ok": "Okay"
 }

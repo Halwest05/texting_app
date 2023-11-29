@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:texting_app/pages/home_page/profile_bottom_sheet.dart';
+import 'package:texting_app/pages/chat_page.dart';
+import 'package:texting_app/pages/home_page/friend_profile_bottom_sheet.dart';
 import 'package:texting_app/tools.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
@@ -120,9 +121,14 @@ class FriendTabBottomSheetTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        Get.bottomSheet(ProfileBottomSheet(profile: profile),
+      onTap: () async {
+        String? res = await Get.bottomSheet(
+            FriendProfileBottomSheet(profile: profile),
             isScrollControlled: true);
+
+        if (res == "message") {
+          Get.to(ChatPage(profile: profile), transition: Transition.fade);
+        }
       },
       borderRadius: BorderRadius.circular(15),
       child: Padding(
@@ -153,7 +159,10 @@ class FriendTabBottomSheetTile extends StatelessWidget {
                   child: IconButton(
                     color: Colors.purple,
                     iconSize: 28,
-                    onPressed: () {},
+                    onPressed: () {
+                      Get.to(ChatPage(profile: profile),
+                          transition: Transition.fade);
+                    },
                     icon: const Icon(Icons.chat),
                   )),
             ),

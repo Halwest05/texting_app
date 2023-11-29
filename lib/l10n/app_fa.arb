@@ -43,5 +43,9 @@
     "send_request": "داخوازی ناردن",
     "copy_id": "کۆپی ID",
     "active_now": "لەسەر هێڵە",
-    "type_a_msg": "نامەیەک بنووسە..."
+    "type_a_msg": "نامەیەک بنووسە...",
+    "do_u_wanna_unfriend": "دەتەوێت عاجزبیت لەگەڵی؟",
+    "do_u_wanna_block": "دەتەوێت بلۆکی بکەیت؟",
+    "copied_to_clipbrd": "بە سەرکەوتوویی کۆپی کرا",
+    "ok": "باشە"
 }

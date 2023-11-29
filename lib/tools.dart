@@ -18,3 +18,16 @@ class MiniProfile {
   const MiniProfile(
       {required this.name, required this.imgPath, this.message, this.username});
 }
+
+class Message {
+  final String name;
+  final String message;
+  final String imgPath;
+  final bool isSelf;
+
+  const Message(
+      {required this.name,
+      required this.imgPath,
+      required this.message,
+      required this.isSelf});
+}

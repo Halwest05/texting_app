@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:texting_app/tools.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
-class ProfileBottomSheet extends StatefulWidget {
+class ProfileBottomSheetNew extends StatefulWidget {
   final MiniProfile profile;
-  const ProfileBottomSheet({super.key, required this.profile});
+  final List<Widget> actions;
+  const ProfileBottomSheetNew(
+      {super.key, required this.profile, this.actions = const []});
 
   @override
-  State<ProfileBottomSheet> createState() => _ProfileBottomSheetState();
+  State<ProfileBottomSheetNew> createState() => _ProfileBottomSheetStateNew();
 }
 
-class _ProfileBottomSheetState extends State<ProfileBottomSheet> {
+class _ProfileBottomSheetStateNew extends State<ProfileBottomSheetNew> {
   bool isFav = false;
   int favCount = 0;
 
@@ -54,61 +57,75 @@ class _ProfileBottomSheetState extends State<ProfileBottomSheet> {
                   padding: EdgeInsets.only(
                       left: MyTools.isKurdish ? 0 : 12,
                       right: MyTools.isKurdish ? 12 : 0),
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(25),
-                    onTap: () {
-                      if (isFav) {
-                        favCount--;
-                      } else {
-                        favCount++;
-                      }
+                  child: Row(
+                    children: [
+                      InkWell(
+                        borderRadius: BorderRadius.circular(25),
+                        onTap: () {
+                          if (isFav) {
+                            favCount--;
+                          } else {
+                            favCount++;
+                          }
 
-                      setState(() {
-                        isFav = !isFav;
-                      });
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 2),
-                      child: Column(
-                        children: [
-                          isFav
-                              ? const Icon(Icons.favorite,
-                                  color: Colors.pinkAccent, size: 36)
-                              : const Icon(Icons.favorite_border,
-                                  color: Colors.pinkAccent, size: 32),
-                          Text(favCount.toString())
-                        ],
+                          setState(() {
+                            isFav = !isFav;
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 2),
+                          child: Column(
+                            children: [
+                              isFav
+                                  ? const Icon(Icons.favorite,
+                                      color: Colors.pinkAccent, size: 36)
+                                  : const Icon(Icons.favorite_border,
+                                      color: Colors.pinkAccent, size: 32),
+                              Text(favCount.toString())
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
+                      const SizedBox(
+                          height: 50,
+                          child: VerticalDivider(color: Colors.black54))
+                    ],
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.only(
                       right: MyTools.isKurdish ? 0 : 16,
                       left: MyTools.isKurdish ? 16 : 0),
-                  child: Row(
-                    children: [
-                      ElevatedButton.icon(
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.yellow.shade700),
-                          onPressed: () {},
-                          icon: const Icon(Icons.message),
-                          label: Text(AppLocalizations.of(context)!.message)),
-                      const SizedBox(width: 8),
-                      OutlinedButton.icon(
-                          onPressed: () {},
-                          style: OutlinedButton.styleFrom(
-                              foregroundColor: Colors.red),
-                          icon: const Icon(Icons.person_remove_rounded),
-                          label: Text(AppLocalizations.of(context)!.unfriend))
-                    ],
-                  ),
+                  child: Row(children: widget.actions),
                 )
               ]),
               const Divider(color: Colors.black54),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () async {
+                  String? res = await showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text(AppLocalizations.of(context)!.are_u_sure),
+                      content:
+                          Text(AppLocalizations.of(context)!.do_u_wanna_block),
+                      actions: [
+                        TextButton(
+                            onPressed: () => Get.back(),
+                            child: Text(AppLocalizations.of(context)!.no)),
+                        TextButton(
+                            style: TextButton.styleFrom(
+                                foregroundColor: Colors.red),
+                            onPressed: () => Get.back(result: "block"),
+                            child: Text(AppLocalizations.of(context)!.yes))
+                      ],
+                    ),
+                  );
+
+                  if (res == "block") {
+                    Get.back(result: "block");
+                  }
+                },
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 36),
