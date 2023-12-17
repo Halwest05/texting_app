@@ -56,7 +56,7 @@ class FriendsPageTile extends StatelessWidget {
             isScrollControlled: true);
 
         if (res == "message") {
-          Get.to(ChatPage(profile: profile), transition: Transition.fade);
+          Get.to(() => ChatPage(profile: profile), transition: Transition.fade);
         }
       },
       borderRadius: BorderRadius.circular(15),

@@ -47,5 +47,6 @@
     "do_u_wanna_unfriend": "Do you want to unfriend?",
     "do_u_wanna_block": "Do you want to block?",
     "copied_to_clipbrd": "Copied to clipboard",
-    "ok": "Okay"
+    "ok": "Okay",
+    "slide_to_cancel": "Slide to cancel"
 }

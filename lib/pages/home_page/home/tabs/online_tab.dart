@@ -49,9 +49,11 @@ class OnlineTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Get.to(ChatPage(profile: profile),
-            transition: Transition.fade,
-            duration: const Duration(milliseconds: 200));
+        Get.to(
+          () => ChatPage(profile: profile),
+          transition: Transition.fade,
+          duration: const Duration(milliseconds: 200),
+        );
       },
       borderRadius: BorderRadius.circular(15),
       child: Padding(

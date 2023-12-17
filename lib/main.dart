@@ -29,18 +29,19 @@ class MainApp extends StatelessWidget {
     }
 
     return GetMaterialApp(
-        debugShowCheckedModeBanner: false,
-        builder: (context, child) {
-          return Theme(
-            data: MyTools.isKurdish ? kurdishTheme() : englishTheme(),
-            child: child!,
-          );
-        },
-        home: const LoginPage(),
-        supportedLocales: L10n.all,
-        locale: locale,
-        theme: englishTheme(),
-        localizationsDelegates: AppLocalizations.localizationsDelegates);
+      debugShowCheckedModeBanner: false,
+      builder: (context, child) {
+        return Theme(
+          data: MyTools.isKurdish ? kurdishTheme() : englishTheme(),
+          child: child!,
+        );
+      },
+      home: const LoginPage(),
+      supportedLocales: L10n.all,
+      locale: locale,
+      theme: englishTheme(),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+    );
   }
 
   static ThemeData kurdishTheme() {

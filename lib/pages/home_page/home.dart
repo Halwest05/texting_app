@@ -182,7 +182,8 @@ class _HomeState extends State<Home> {
                             TextButton(
                                 style: TextButton.styleFrom(
                                     foregroundColor: Colors.red),
-                                onPressed: () => Get.off(const LoginPage()),
+                                onPressed: () =>
+                                    Get.off(() => const LoginPage()),
                                 child: Text(AppLocalizations.of(context)!.yes))
                           ],
                         ))),

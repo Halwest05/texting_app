@@ -127,7 +127,7 @@ class FriendTabBottomSheetTile extends StatelessWidget {
             isScrollControlled: true);
 
         if (res == "message") {
-          Get.to(ChatPage(profile: profile), transition: Transition.fade);
+          Get.to(() => ChatPage(profile: profile), transition: Transition.fade);
         }
       },
       borderRadius: BorderRadius.circular(15),
@@ -160,7 +160,7 @@ class FriendTabBottomSheetTile extends StatelessWidget {
                     color: Colors.purple,
                     iconSize: 28,
                     onPressed: () {
-                      Get.to(ChatPage(profile: profile),
+                      Get.to(() => ChatPage(profile: profile),
                           transition: Transition.fade);
                     },
                     icon: const Icon(Icons.chat),

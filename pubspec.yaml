@@ -9,10 +9,15 @@ environment:
 dependencies:
   shared_preferences:
   badges:
+  path_provider:
   get:
   flutter_holo_date_picker:
+  video_thumbnail:
+  video_player:
   image_picker:
   image_cropper:
+  just_audio:
+  record:
   flutter_localizations:
     sdk: flutter
   intl:

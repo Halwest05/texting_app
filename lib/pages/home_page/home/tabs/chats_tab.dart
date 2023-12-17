@@ -64,7 +64,7 @@ class ChatsTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Get.to(ChatPage(profile: profile), transition: Transition.fade);
+        Get.to(() => ChatPage(profile: profile), transition: Transition.fade);
       },
       borderRadius: BorderRadius.circular(15),
       child: Padding(

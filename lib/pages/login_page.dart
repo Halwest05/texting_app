@@ -152,7 +152,7 @@ class _LoginPageState extends State<LoginPage> {
                             shape: const StadiumBorder(),
                             backgroundColor:
                                 const Color.fromRGBO(206, 128, 203, 1)),
-                        onPressed: () => Get.off(const Home()),
+                        onPressed: () => Get.off(() => const Home()),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 64),
                           child:
@@ -173,7 +173,8 @@ class _LoginPageState extends State<LoginPage> {
                         )
                       ]),
                       TextButton(
-                          onPressed: () => Get.to(const CreateAccountPage(),
+                          onPressed: () => Get.to(
+                              () => const CreateAccountPage(),
                               transition: Transition.downToUp),
                           style: ElevatedButton.styleFrom(
                               foregroundColor:
@@ -610,7 +611,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                 ]),
                 const Divider(color: Colors.black45),
                 ElevatedButton(
-                  onPressed: () => Get.off(const Home()),
+                  onPressed: () => Get.off(() => const Home()),
                   style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromRGBO(206, 128, 203, 1),
                       shape: const StadiumBorder()),
