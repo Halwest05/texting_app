@@ -31,11 +31,18 @@ class _ProfileBottomSheetStateNew extends State<ProfileBottomSheetNew> {
             return Column(children: [
               const SizedBox(height: 20),
               Card(
-                  elevation: 4,
-                  clipBehavior: Clip.antiAlias,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25)),
-                  child: Image.asset(widget.profile.imgPath, height: 200)),
+                elevation: 4,
+                clipBehavior: Clip.antiAlias,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25)),
+                child: GestureDetector(
+                  onTap: () => Get.dialog(GestureDetector(
+                      onTap: () => Get.back(),
+                      child: Image.asset(widget.profile.imgPath,
+                          fit: BoxFit.contain))),
+                  child: Image.asset(widget.profile.imgPath, height: 200),
+                ),
+              ),
               const SizedBox(height: 4),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),

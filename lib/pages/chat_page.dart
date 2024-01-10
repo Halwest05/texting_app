@@ -172,122 +172,180 @@ class _ChatPageState extends State<ChatPage> {
                     child: _chatFocusNode.hasFocus
                         ? const SizedBox()
                         : Row(
-                            children: isRecording
-                                ? [
-                                    const SizedBox(width: 8),
-                                    Text(
-                                      AppLocalizations.of(context)!
-                                          .slide_to_cancel,
-                                      style: const TextStyle(
-                                        color: Colors.black54,
-                                      ),
-                                    )
-                                  ]
-                                : [
-                                    InkWell(
-                                      onTap: () async {
-                                        XFile? imageFile =
-                                            await _imagePicker.pickImage(
-                                                source: ImageSource.camera,
-                                                imageQuality: 75,
-                                                maxHeight: 1500,
-                                                maxWidth: 1500);
+                            children: [
+                              InkWell(
+                                onTapDown: (details) async {
+                                  setState(() {
+                                    isRecording = true;
+                                  });
 
-                                        if (imageFile != null) {
-                                          Media media = Media(
-                                              type: MediaType.picture,
-                                              img: imageFile.path);
+                                  if (await recorder.hasPermission()) {
+                                    recorder.start(
+                                        const RecordConfig(
+                                            encoder: AudioEncoder.wav),
+                                        path:
+                                            "${(await getTemporaryDirectory()).path}${DateTime.now()}.wav");
+                                  } else {
+                                    setState(() {
+                                      isRecording = false;
+                                    });
+                                  }
+                                },
+                                onTapCancel: () {
+                                  setState(() {
+                                    isRecording = false;
+                                  });
 
-                                          sendMessage(
-                                              name: "",
-                                              imgPath: "",
-                                              isSelf: true,
-                                              medias: <Media>[media]);
-                                        }
-                                      },
-                                      customBorder: const CircleBorder(),
-                                      child: const Padding(
-                                        padding: EdgeInsets.all(7),
-                                        child: Icon(Icons.camera_alt_rounded,
-                                            color: Colors.purple, size: 25),
-                                      ),
-                                    ),
-                                    InkWell(
-                                      onTap: pickMediaFromGallery,
-                                      customBorder: const CircleBorder(),
-                                      child: const Padding(
-                                        padding: EdgeInsets.all(7),
-                                        child: Icon(Icons.image_rounded,
-                                            color: Colors.purple, size: 24),
-                                      ),
-                                    ),
-                                  ],
+                                  recorder.stop();
+                                },
+                                onTapUp: (details) async {
+                                  setState(() {
+                                    isRecording = false;
+                                  });
+
+                                  String? outputPath = await recorder.stop();
+
+                                  if (outputPath != null) {
+                                    AudioPlayer player = AudioPlayer();
+
+                                    Duration? duration =
+                                        await player.setFilePath(outputPath);
+
+                                    if (duration!.inSeconds >= 1) {
+                                      sendMessage(
+                                          name: "",
+                                          imgPath: "",
+                                          isSelf: true,
+                                          voicePath: outputPath);
+                                    }
+
+                                    player.dispose();
+                                  }
+                                },
+                                customBorder: const CircleBorder(),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(6),
+                                  child: Icon(
+                                      isRecording
+                                          ? Icons.settings_voice_rounded
+                                          : Icons.keyboard_voice_rounded,
+                                      color: Colors.purple,
+                                      size: 28),
+                                ),
+                              ),
+                              InkWell(
+                                onTap: () async {
+                                  String? res = await showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return SimpleDialog(
+                                        title: Text(
+                                            AppLocalizations.of(context)!
+                                                .choose_cam_way),
+                                        children: [
+                                          TextButton.icon(
+                                            onPressed: () {
+                                              Get.back(result: "photo");
+                                            },
+                                            icon:
+                                                const Icon(Icons.image_rounded),
+                                            label: Text(
+                                                AppLocalizations.of(context)!
+                                                    .photo),
+                                          ),
+                                          TextButton.icon(
+                                            onPressed: () {
+                                              Get.back(result: "video");
+                                            },
+                                            icon: const Icon(
+                                                Icons.video_collection_rounded),
+                                            label: Text(
+                                                AppLocalizations.of(context)!
+                                                    .video),
+                                          )
+                                        ],
+                                      );
+                                    },
+                                  );
+
+                                  if (res == "photo") {
+                                    XFile? imageFile =
+                                        await _imagePicker.pickImage(
+                                            source: ImageSource.camera,
+                                            imageQuality: 75,
+                                            maxHeight: 1500,
+                                            maxWidth: 1500);
+
+                                    if (imageFile != null) {
+                                      Media media = Media(
+                                          type: MediaType.picture,
+                                          img: imageFile.path);
+
+                                      sendMessage(
+                                          name: "",
+                                          imgPath: "",
+                                          isSelf: true,
+                                          medias: <Media>[media]);
+                                    }
+                                  } else if (res == "video") {
+                                    XFile? vidFile = await _imagePicker
+                                        .pickVideo(source: ImageSource.camera);
+
+                                    if (vidFile != null) {
+                                      String thumbnailPath =
+                                          (await VideoThumbnail.thumbnailFile(
+                                              video: vidFile.path,
+                                              maxWidth: 1500,
+                                              maxHeight: 1500,
+                                              quality: 75))!;
+
+                                      Media media = Media(
+                                          type: MediaType.video,
+                                          vid: Video(
+                                              thumbnailPath: thumbnailPath,
+                                              vidPath: vidFile.path));
+
+                                      sendMessage(
+                                          name: "",
+                                          imgPath: "",
+                                          isSelf: true,
+                                          medias: <Media>[media]);
+                                    }
+                                  }
+                                },
+                                customBorder: const CircleBorder(),
+                                child: const Padding(
+                                  padding: EdgeInsets.all(7),
+                                  child: Icon(Icons.camera_alt_rounded,
+                                      color: Colors.purple, size: 25),
+                                ),
+                              ),
+                            ],
                           ),
                   ),
                   InkWell(
-                    onTapDown: (details) async {
-                      setState(() {
-                        isRecording = true;
-                      });
-
-                      if (await recorder.hasPermission()) {
-                        recorder.start(
-                            const RecordConfig(encoder: AudioEncoder.wav),
-                            path:
-                                "${(await getTemporaryDirectory()).path}${DateTime.now()}.wav");
-                      } else {
-                        setState(() {
-                          isRecording = false;
-                        });
-                      }
-                    },
-                    onTapCancel: () {
-                      setState(() {
-                        isRecording = false;
-                      });
-
-                      recorder.stop();
-                    },
-                    onTapUp: (details) async {
-                      setState(() {
-                        isRecording = false;
-                      });
-
-                      String? outputPath = await recorder.stop();
-
-                      if (outputPath != null) {
-                        AudioPlayer player = AudioPlayer();
-
-                        Duration? duration =
-                            await player.setFilePath(outputPath);
-
-                        if (duration!.inSeconds >= 1) {
-                          sendMessage(
-                              name: "",
-                              imgPath: "",
-                              isSelf: true,
-                              voicePath: outputPath);
-                        }
-
-                        player.dispose();
-                      }
-                    },
+                    onTap: pickMediaFromGallery,
                     customBorder: const CircleBorder(),
-                    child: Padding(
-                      padding: const EdgeInsets.all(6),
-                      child: Icon(
-                          isRecording
-                              ? Icons.settings_voice_rounded
-                              : Icons.keyboard_voice_rounded,
-                          color: Colors.purple,
-                          size: 28),
+                    child: const Padding(
+                      padding: EdgeInsets.all(7),
+                      child: Icon(Icons.image_rounded,
+                          color: Colors.purple, size: 24),
                     ),
                   ),
                   isRecording
-                      ? const SizedBox(
+                      ? SizedBox(
                           height: 60,
                           child: Row(
-                            children: [MyRecordTimeCounter()],
+                            children: [
+                              const MyRecordTimeCounter(),
+                              const SizedBox(width: 8),
+                              Text(
+                                AppLocalizations.of(context)!.slide_to_cancel,
+                                style: const TextStyle(
+                                  color: Colors.black54,
+                                ),
+                              ),
+                            ],
                           ),
                         )
                       : Flexible(

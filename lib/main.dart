@@ -46,6 +46,7 @@ class MainApp extends StatelessWidget {
 
   static ThemeData kurdishTheme() {
     return ThemeData(
+        useMaterial3: false,
         colorScheme: const ColorScheme.light(
             primary: Colors.purple,
             secondary: Color.fromRGBO(206, 128, 203, 1)),
@@ -54,6 +55,7 @@ class MainApp extends StatelessWidget {
 
   static ThemeData englishTheme() {
     return ThemeData(
+        useMaterial3: false,
         colorScheme: const ColorScheme.light(
             primary: Colors.purple,
             secondary: Color.fromRGBO(206, 128, 203, 1)),
