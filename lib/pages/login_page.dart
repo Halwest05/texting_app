@@ -8,6 +8,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:texting_app/main.dart';
 import 'package:texting_app/pages/home_page/home.dart';
 import 'package:texting_app/tools.dart';
 
@@ -35,13 +36,7 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   GestureDetector(
-                    onTap: () async {
-                      sharedPreferences ??=
-                          await SharedPreferences.getInstance();
-
-                      sharedPreferences!.setString("lang", "en");
-                      Get.updateLocale(const Locale("en"));
-                    },
+                    onTap: MainApp.changeToEnglish,
                     child: Card(
                       clipBehavior: Clip.antiAlias,
                       elevation: 3,
@@ -50,13 +45,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () async {
-                      sharedPreferences ??=
-                          await SharedPreferences.getInstance();
-
-                      sharedPreferences!.setString("lang", "fa");
-                      Get.updateLocale(const Locale("fa"));
-                    },
+                    onTap: MainApp.changeToKurdish,
                     child: Card(
                       elevation: 3,
                       clipBehavior: Clip.antiAlias,

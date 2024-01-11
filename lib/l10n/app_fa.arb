@@ -51,5 +51,16 @@
     "slide_to_cancel": "پەنجە لابەرە بۆ گەڕانەوە",
     "choose_cam_way": "شێوەی کامێرا دیاری بکە...",
     "photo": "ڕەسم",
-    "video": "ڤیدیۆ"
+    "video": "ڤیدیۆ",
+    "settings": "ڕێکخستن",
+    "change_username": "ناوی بەکارهێنەر گۆڕین",
+    "changes_the_username": "ناوی بەکارهێنەرەکە دەگۆڕێت...",
+    "change_password": "تێپەڕە وشە گۆڕین",
+    "changes_the_password": "تێپەڕە وشەکە دەگۆڕێت...",
+    "change_pfp": "گۆڕینی وێنەی هەژمار",
+    "changes_the_pfp": "وێنەی هەژمارەکەت دەگۆڕێت...",
+    "delete_acc": "هەژمار سڕینەوە",
+    "deletes_the_acc": "هەژمارەکەت بۆ هەتاهەتایی دەسڕێتەوە...",
+    "change_lang": "زمان گۆڕین",
+    "changes_the_lang": "زمانی ئەپەکە دەگۆڕێت..."
 }

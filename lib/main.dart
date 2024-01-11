@@ -61,4 +61,18 @@ class MainApp extends StatelessWidget {
             secondary: Color.fromRGBO(206, 128, 203, 1)),
         fontFamily: "Roboto");
   }
+
+  static Future<void> changeToEnglish() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    sharedPreferences.setString("lang", "en");
+    Get.updateLocale(const Locale("en"));
+  }
+
+  static Future<void> changeToKurdish() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    sharedPreferences.setString("lang", "fa");
+    Get.updateLocale(const Locale("fa"));
+  }
 }

@@ -51,5 +51,16 @@
     "slide_to_cancel": "Slide to cancel",
     "choose_cam_way": "Choose camera way...",
     "photo": "Photo",
-    "video": "Video"
+    "video": "Video",
+    "settings": "Settings",
+    "change_username": "Change Username",
+    "changes_the_username": "Changes the username...",
+    "change_password": "Change Password",
+    "changes_the_password": "Changes the password...",
+    "change_pfp": "Change Profile Picture",
+    "changes_the_pfp": "Changes the profile picture...",
+    "delete_acc": "Delete Account",
+    "deletes_the_acc": "Removes the account permanently...",
+    "change_lang": "Change Language",
+    "changes_the_lang": "Changes the app language..."
 }

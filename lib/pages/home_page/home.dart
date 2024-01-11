@@ -5,6 +5,7 @@ import 'package:texting_app/pages/home_page/friend_requests/friend_requests_page
 import 'package:texting_app/pages/home_page/friends/friends_page.dart';
 import 'package:texting_app/pages/home_page/home/home_page.dart';
 import 'package:texting_app/pages/home_page/home/find_people_bottom_sheet.dart';
+import 'package:texting_app/pages/home_page/settings/settings.dart';
 import 'package:texting_app/pages/login_page.dart';
 import 'package:texting_app/tools.dart';
 
@@ -73,6 +74,9 @@ class _HomeState extends State<Home> {
             case 2:
               appbarText = AppLocalizations.of(context)!.friend_requests;
               break;
+            case 3:
+              appbarText = AppLocalizations.of(context)!.settings;
+              break;
           }
 
           return Text(appbarText, overflow: TextOverflow.ellipsis);
@@ -97,14 +101,15 @@ class _HomeState extends State<Home> {
             SizedBox(
               width: double.infinity,
               child: DrawerHeader(
-                  padding: const EdgeInsets.only(top: 10),
-                  decoration: const BoxDecoration(
-                      color: Color.fromRGBO(206, 128, 203, 1)),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Directionality(
-                      textDirection: TextDirection.ltr,
-                      child: Column(children: [
+                padding: const EdgeInsets.only(top: 10),
+                decoration: const BoxDecoration(
+                    color: Color.fromRGBO(206, 128, 203, 1)),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Directionality(
+                    textDirection: TextDirection.ltr,
+                    child: Column(
+                      children: [
                         Card(
                           clipBehavior: Clip.antiAlias,
                           shape: RoundedRectangleBorder(
@@ -124,9 +129,11 @@ class _HomeState extends State<Home> {
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(color: Colors.black54),
                         )
-                      ]),
+                      ],
                     ),
-                  )),
+                  ),
+                ),
+              ),
             ),
             ListTile(
                 title: Text(AppLocalizations.of(context)!.home),
@@ -161,6 +168,16 @@ class _HomeState extends State<Home> {
                     child: const Icon(Icons.person_add)),
                 onTap: () => setState(() {
                       currentPage = 2;
+                      currentHomePage = 0;
+
+                      Get.back();
+                    })),
+            const Divider(color: Colors.black45),
+            ListTile(
+                title: Text(AppLocalizations.of(context)!.settings),
+                leading: const Icon(Icons.settings_rounded),
+                onTap: () => setState(() {
+                      currentPage = 3;
                       currentHomePage = 0;
 
                       Get.back();
@@ -222,6 +239,8 @@ class _HomeState extends State<Home> {
               return const FriendsPage();
             case 2:
               return FriendRequestsPage(profiles: friendRequestProfiles);
+            case 3:
+              return const SettingsPage();
             default:
               return Container();
           }

@@ -467,7 +467,7 @@ class _ChatPageState extends State<ChatPage> {
       _chatFocusNode.unfocus();
     });
 
-    Future.delayed(const Duration(milliseconds: 75), () {
+    Future.delayed(const Duration(milliseconds: 125), () {
       _chatScrollController
           .jumpTo(_chatScrollController.position.maxScrollExtent);
     });
