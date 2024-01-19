@@ -131,19 +131,22 @@ class _ChatPageState extends State<ChatPage> {
           ],
         ),
         body: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Expanded(
+            Flexible(
               child: Directionality(
                 textDirection: TextDirection.ltr,
                 child: AnimatedList(
                   key: _listKey,
                   controller: _chatScrollController,
                   initialItemCount: messages.length,
+                  shrinkWrap: true,
+                  reverse: true,
                   padding: const EdgeInsets.only(top: 6),
                   itemBuilder: (context, index, animation) => SlideTransition(
                     position: animation.drive(
                       Tween(
-                              begin: messages.last.isSelf
+                              begin: messages.first.isSelf
                                   ? const Offset(1, 0)
                                   : const Offset(-1, 0),
                               end: const Offset(0, 0))
@@ -452,24 +455,21 @@ class _ChatPageState extends State<ChatPage> {
       List<Media>? medias,
       String? voicePath}) {
     setState(() {
-      messages.add(Message(
-          name: name,
-          imgPath: imgPath,
-          message: message,
-          isSelf: isSelf,
-          medias: medias,
-          voicePath: voicePath));
+      messages.insert(
+          0,
+          Message(
+              name: name,
+              imgPath: imgPath,
+              message: message,
+              isSelf: isSelf,
+              medias: medias,
+              voicePath: voicePath));
 
-      _listKey.currentState!.insertItem(messages.length - 1,
-          duration: const Duration(milliseconds: 400));
+      _listKey.currentState!
+          .insertItem(0, duration: const Duration(milliseconds: 400));
 
       _chatController.clear();
       _chatFocusNode.unfocus();
-    });
-
-    Future.delayed(const Duration(milliseconds: 125), () {
-      _chatScrollController
-          .jumpTo(_chatScrollController.position.maxScrollExtent);
     });
   }
 
@@ -498,12 +498,12 @@ class MessageCard extends StatelessWidget {
           clipBehavior: Clip.hardEdge,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.horizontal(
-                right: Radius.circular(8), left: Radius.circular(16)),
+                right: Radius.circular(8), left: Radius.circular(14)),
           ),
           color: const Color.fromRGBO(227, 180, 226, 1),
           child: Padding(
             padding:
-                const EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 2),
+                const EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 4),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
@@ -536,11 +536,11 @@ class MessageCard extends StatelessWidget {
           clipBehavior: Clip.hardEdge,
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.horizontal(
-                  left: Radius.circular(8), right: Radius.circular(16))),
+                  left: Radius.circular(8), right: Radius.circular(14))),
           color: const Color.fromRGBO(227, 180, 226, 1),
           child: Padding(
             padding:
-                const EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 2),
+                const EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 4),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
@@ -576,7 +576,7 @@ class MessageCard extends StatelessWidget {
         (index) => Column(
           children: [
             ConstrainedBox(
-              constraints: const BoxConstraints(maxHeight: 180),
+              constraints: const BoxConstraints(maxHeight: 360),
               child: GestureDetector(
                 onTap: () => Get.dialog(
                   medias[index].type == MediaType.picture

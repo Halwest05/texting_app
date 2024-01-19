@@ -6,37 +6,28 @@ import 'package:texting_app/tools.dart';
 class OnlineTab extends StatelessWidget {
   const OnlineTab({super.key});
 
-  static List<MiniProfile> profiles = [
-    MiniProfile(
-        name: "Hallo Ahmed", imgPath: MyTools.testPropic2, username: "hallo20"),
-    MiniProfile(
-        name: "Halkawt Mahmood",
-        imgPath: MyTools.testPropic3,
-        username: "halkawt69"),
-    MiniProfile(
-        name: "Hallsho Mlshor",
-        imgPath: MyTools.testPropic4,
-        username: "halshomlshor"),
-  ];
+  static List<MiniProfile> profiles = [];
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () async {
-        return await Future.delayed(const Duration(seconds: 1));
-      },
-      child: ListView.builder(
-          padding: const EdgeInsets.only(top: 25, left: 4, right: 4),
-          itemBuilder: (context, index) {
-            return Column(
-              children: [
-                OnlineTile(profile: profiles[index]),
-                const Divider(color: Colors.black45)
-              ],
-            );
-          },
-          itemCount: profiles.length),
-    );
+    return profiles.isEmpty
+        ? const Center(child: Text("No active friends..."))
+        : RefreshIndicator(
+            onRefresh: () async {
+              return await Future.delayed(const Duration(seconds: 1));
+            },
+            child: ListView.builder(
+                padding: const EdgeInsets.only(top: 25, left: 4, right: 4),
+                itemBuilder: (context, index) {
+                  return Column(
+                    children: [
+                      OnlineTile(profile: profiles[index]),
+                      const Divider(color: Colors.black45)
+                    ],
+                  );
+                },
+                itemCount: profiles.length),
+          );
   }
 }
 

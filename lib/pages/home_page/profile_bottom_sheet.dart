@@ -19,28 +19,29 @@ class _ProfileBottomSheetStateNew extends State<ProfileBottomSheetNew> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 430,
-      child: BottomSheet(
-          shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(25))),
-          onClosing: () {},
-          enableDrag: false,
-          backgroundColor: const Color.fromRGBO(227, 180, 226, 1),
-          builder: (context) {
-            return Column(children: [
-              const SizedBox(height: 20),
-              Card(
-                elevation: 4,
-                clipBehavior: Clip.antiAlias,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25)),
-                child: GestureDetector(
-                  onTap: () => Get.dialog(GestureDetector(
-                      onTap: () => Get.back(),
-                      child: Image.asset(widget.profile.imgPath,
-                          fit: BoxFit.contain))),
-                  child: Image.asset(widget.profile.imgPath, height: 200),
+    return BottomSheet(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(25))),
+        onClosing: () {},
+        enableDrag: false,
+        backgroundColor: const Color.fromRGBO(227, 180, 226, 1),
+        builder: (context) {
+          return Padding(
+            padding: const EdgeInsets.only(top: 8, bottom: 5),
+            child: Column(mainAxisSize: MainAxisSize.min, children: [
+              Flexible(
+                child: Card(
+                  elevation: 4,
+                  clipBehavior: Clip.antiAlias,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25)),
+                  child: GestureDetector(
+                    onTap: () => Get.dialog(GestureDetector(
+                        onTap: () => Get.back(),
+                        child: Image.asset(widget.profile.imgPath,
+                            fit: BoxFit.contain))),
+                    child: Image.asset(widget.profile.imgPath, height: 200),
+                  ),
                 ),
               ),
               const SizedBox(height: 4),
@@ -58,7 +59,7 @@ class _ProfileBottomSheetStateNew extends State<ProfileBottomSheetNew> {
                   )
                 ]),
               ),
-              const Divider(color: Colors.black54),
+              const Divider(color: Colors.black45),
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                 Padding(
                   padding: EdgeInsets.only(
@@ -96,7 +97,7 @@ class _ProfileBottomSheetStateNew extends State<ProfileBottomSheetNew> {
                       ),
                       const SizedBox(
                           height: 50,
-                          child: VerticalDivider(color: Colors.black54))
+                          child: VerticalDivider(color: Colors.black45))
                     ],
                   ),
                 ),
@@ -107,7 +108,7 @@ class _ProfileBottomSheetStateNew extends State<ProfileBottomSheetNew> {
                   child: Row(children: widget.actions),
                 )
               ]),
-              const Divider(color: Colors.black54),
+              const Divider(color: Colors.black45),
               ElevatedButton(
                 onPressed: () async {
                   String? res = await showDialog(
@@ -146,8 +147,8 @@ class _ProfileBottomSheetStateNew extends State<ProfileBottomSheetNew> {
                   ),
                 ),
               )
-            ]);
-          }),
-    );
+            ]),
+          );
+        });
   }
 }

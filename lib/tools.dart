@@ -27,6 +27,50 @@ class MyTools {
   }
 }
 
+class FirestoreUser {
+  final String username;
+  final String email;
+  final String name;
+  final String gender;
+  final String imgPath;
+  final int birthdate;
+
+  const FirestoreUser(
+      {required this.username,
+      required this.name,
+      required this.email,
+      required this.gender,
+      required this.imgPath,
+      required this.birthdate});
+
+  Map<String, dynamic> get mappedUser {
+    return {
+      "email": email,
+      "name": name,
+      "gender": gender,
+      "imgPath": imgPath,
+      "birthdate": birthdate
+    };
+  }
+
+  static FirestoreUser mapToFirestoreUser(
+      {required Map<String, dynamic> mappedUser, required String mUsername}) {
+    String mEmail = mappedUser["email"];
+    String mName = mappedUser["name"];
+    String mGender = mappedUser["gender"];
+    String mImgPath = mappedUser["imgPath"];
+    int mBirthdate = mappedUser["birthdate"];
+
+    return FirestoreUser(
+        username: mUsername,
+        name: mName,
+        email: mEmail,
+        gender: mGender,
+        imgPath: mImgPath,
+        birthdate: mBirthdate);
+  }
+}
+
 class MiniProfile {
   final String name;
   final String? username;
@@ -77,7 +121,7 @@ class _VoiceMessageState extends State<VoiceMessage> {
 
     audioPlayer.positionStream.listen((event) {
       if (voiceDuration != null) {
-        bool isFinished = event.inMilliseconds == voiceDuration!.inMilliseconds;
+        bool isFinished = event.inMilliseconds >= voiceDuration!.inMilliseconds;
 
         if (isFinished) {
           audioPlayer.seek(Duration.zero);
@@ -139,8 +183,9 @@ class _VoiceMessageState extends State<VoiceMessage> {
                   value: voiceDuration == null
                       ? 0
                       : position != null
-                          ? position.inMilliseconds /
-                              voiceDuration!.inMilliseconds
+                          ? (position.inMilliseconds /
+                                  voiceDuration!.inMilliseconds)
+                              .clamp(0, 1)
                           : 0,
                   onChanged: voiceDuration == null
                       ? null

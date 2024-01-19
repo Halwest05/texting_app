@@ -6,52 +6,23 @@ import 'package:texting_app/tools.dart';
 class ChatsTab extends StatelessWidget {
   const ChatsTab({super.key});
 
-  static List<MiniProfile> profiles = [
-    MiniProfile(
-        name: "Halmat Mohammed",
-        imgPath: MyTools.testPropic1,
-        message: "ajsdkhsakjdsaasdjksa",
-        username: "halmat10"),
-    MiniProfile(
-        name: "Hallo Ahmed",
-        imgPath: MyTools.testPropic2,
-        message: "ajsdkhsakjdsaq9w8diok aaksdha",
-        username: "hallo20"),
-    MiniProfile(
-        name: "Halkawt Mahmood",
-        imgPath: MyTools.testPropic3,
-        message: "ajsdkhsakjdsawdhjqkd",
-        username: "halkawt69"),
-    MiniProfile(
-        name: "Halwest Hamamin",
-        imgPath: MyTools.testPropic1,
-        message: "ajsdkhsakjdsa19i2ijks",
-        username: "halwest12"),
-    MiniProfile(
-        name: "Hallsho Mlshor",
-        imgPath: MyTools.testPropic4,
-        message: "n8e29es28y71s182u",
-        username: "halshomlshor"),
-    MiniProfile(
-        name: "Halgwrd Karwan",
-        imgPath: MyTools.testPropic3,
-        message: "ajsdkhsakjdsaas9duiasojd",
-        username: "halgwrd01")
-  ];
+  static List<MiniProfile> profiles = [];
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        padding: const EdgeInsets.only(top: 25, left: 4, right: 4),
-        itemBuilder: (context, index) {
-          return Column(
-            children: [
-              ChatsTile(profile: profiles[index]),
-              const Divider(color: Colors.black45),
-            ],
-          );
-        },
-        itemCount: profiles.length);
+    return profiles.isEmpty
+        ? const Center(child: Text("No conversations yet..."))
+        : ListView.builder(
+            padding: const EdgeInsets.only(top: 25, left: 4, right: 4),
+            itemBuilder: (context, index) {
+              return Column(
+                children: [
+                  ChatsTile(profile: profiles[index]),
+                  const Divider(color: Colors.black45),
+                ],
+              );
+            },
+            itemCount: profiles.length);
   }
 }
 

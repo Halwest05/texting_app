@@ -62,5 +62,22 @@
     "delete_acc": "Delete Account",
     "deletes_the_acc": "Removes the account permanently...",
     "change_lang": "Change Language",
-    "changes_the_lang": "Changes the app language..."
+    "changes_the_lang": "Changes the app language...",
+    "usercantempty": "Username cannot be empty!",
+    "usermore2letters": "Username must be more than 2 letters!",
+    "emailcantempty": "The email cannot be empty!",
+    "emailinvalid": "The given email is not a valid email!",
+    "passcantempty": "Password cannot be empty!",
+    "passmore7letters": "Password must be more than 8 letters!",
+    "passweak": "This password is too weak!",
+    "userexists": "Another user exists with same username!",
+    "emailexists": "Another user exists with same email!",
+    "selecturgender": "Select your gender!",
+    "fncantempty": "First name cannot be empty!",
+    "fnmore2letters": "First name must be more than 2 letters!",
+    "lncantempty": "Last name cannot be empty!",
+    "lnmore2letters": "Last name must be more than 2 letters!",
+    "userdoesntexist": "This user does not exist!",
+    "userdisabled": "This user has been disabled!",
+    "wrongpass": "The password is incorrect!"
 }

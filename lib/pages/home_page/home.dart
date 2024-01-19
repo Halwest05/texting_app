@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:get/get.dart';
@@ -10,14 +11,16 @@ import 'package:texting_app/pages/login_page.dart';
 import 'package:texting_app/tools.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+  final FirestoreUser user;
+  const Home({super.key, required this.user});
 
   @override
   State<Home> createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
-  final String name = "Halwest Mohammed";
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  late String name;
 
   late final PageController _homePageController;
 
@@ -26,6 +29,7 @@ class _HomeState extends State<Home> {
     super.initState();
 
     _homePageController = PageController();
+    name = widget.user.name;
   }
 
   @override
@@ -37,25 +41,6 @@ class _HomeState extends State<Home> {
 
   int currentHomePage = 0;
   int currentPage = 0;
-
-  static final List<MiniProfile> friendRequestProfiles = [
-    MiniProfile(
-        name: "Karwan ASDhkja",
-        imgPath: MyTools.testPropic2,
-        username: "karwanadhd"),
-    MiniProfile(
-        name: "Karzan 912djiaw",
-        imgPath: MyTools.testPropic4,
-        username: "xkarzanx"),
-    MiniProfile(
-        name: "Kardin 218ejq",
-        imgPath: MyTools.testPropic3,
-        username: "karreligion"),
-    MiniProfile(
-        name: "Karkwzh as9du8sa",
-        imgPath: MyTools.testPropic1,
-        username: "kar98k"),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -110,24 +95,37 @@ class _HomeState extends State<Home> {
                     textDirection: TextDirection.ltr,
                     child: Column(
                       children: [
-                        Card(
-                          clipBehavior: Clip.antiAlias,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
+                        GestureDetector(
+                          onTap: () => Get.dialog(
+                            GestureDetector(
+                              child: Image.network(
+                                widget.user.imgPath,
+                                fit: BoxFit.contain,
+                              ),
+                              onTap: () => Get.back(),
+                            ),
                           ),
-                          child: Image.asset("assets/images/unknown_person.jpg",
-                              height: 85),
+                          child: Card(
+                            clipBehavior: Clip.antiAlias,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Image.network(
+                              widget.user.imgPath,
+                              height: 85,
+                            ),
+                          ),
                         ),
-                        const Text(
-                          "Halwest Mohammed",
+                        Text(
+                          name,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontSize: 16),
+                          style: const TextStyle(fontSize: 16),
                         ),
                         const SizedBox(height: 2),
-                        const Text(
-                          "hallo05",
+                        Text(
+                          widget.user.username,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(color: Colors.black54),
+                          style: const TextStyle(color: Colors.black54),
                         )
                       ],
                     ),
@@ -164,7 +162,7 @@ class _HomeState extends State<Home> {
                     offset: MyTools.isKurdish
                         ? const Offset(-3, -8)
                         : const Offset(8, -5),
-                    label: Text(friendRequestProfiles.length.toString()),
+                    label: const Text("0"),
                     child: const Icon(Icons.person_add)),
                 onTap: () => setState(() {
                       currentPage = 2;
@@ -199,8 +197,11 @@ class _HomeState extends State<Home> {
                             TextButton(
                                 style: TextButton.styleFrom(
                                     foregroundColor: Colors.red),
-                                onPressed: () =>
-                                    Get.off(() => const LoginPage()),
+                                onPressed: () async {
+                                  await _auth.signOut();
+
+                                  Get.offAll(() => const LoginPage());
+                                },
                                 child: Text(AppLocalizations.of(context)!.yes))
                           ],
                         ))),
@@ -238,7 +239,7 @@ class _HomeState extends State<Home> {
             case 1:
               return const FriendsPage();
             case 2:
-              return FriendRequestsPage(profiles: friendRequestProfiles);
+              return const FriendRequestsPage(profiles: []);
             case 3:
               return const SettingsPage();
             default:
