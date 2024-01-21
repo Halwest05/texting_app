@@ -3,9 +3,11 @@ import 'package:get/get.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:texting_app/pages/home_page/home/find_people_bottom_sheet_tabs/friends_tab.dart';
 import 'package:texting_app/pages/home_page/home/find_people_bottom_sheet_tabs/global_tab.dart';
+import 'package:texting_app/tools.dart';
 
 class SearchBottomSheet extends StatefulWidget {
-  const SearchBottomSheet({super.key});
+  final FirestoreUser user;
+  const SearchBottomSheet({super.key, required this.user});
 
   @override
   State<SearchBottomSheet> createState() => _SearchBottomSheetState();
@@ -56,9 +58,9 @@ class _SearchBottomSheetState extends State<SearchBottomSheet>
               Flexible(
                 child: TabBarView(
                   controller: _tabController,
-                  children: const [
-                    FriendsTabBottomSheet(),
-                    GlobalTabBottomSheet()
+                  children: [
+                    FriendsTabBottomSheet(me: widget.user),
+                    GlobalTabBottomSheet(me: widget.user)
                   ],
                 ),
               )

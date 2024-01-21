@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:video_player/video_player.dart';
 
 class MyTools {
@@ -27,58 +29,84 @@ class MyTools {
   }
 }
 
+class LowerCaseTextFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+          TextEditingValue oldValue, TextEditingValue newValue) =>
+      TextEditingValue(
+        selection: newValue.selection,
+        text: newValue.text.toLowerCase(),
+      );
+}
+
 class FirestoreUser {
-  final String username;
+  final String uid;
+  RxString username;
   final String email;
-  final String name;
+  RxString name;
   final String gender;
-  final String imgPath;
+  RxString imgPath;
   final int birthdate;
 
-  const FirestoreUser(
-      {required this.username,
+  FirestoreUser(
+      {required this.uid,
+      required this.username,
       required this.name,
       required this.email,
       required this.gender,
       required this.imgPath,
       required this.birthdate});
 
+  void setUsername(String newUsername) => username.value = newUsername;
+  void setName(String newName) => name.value = newName;
+  void setImgPath(String newImgPath) => imgPath.value = newImgPath;
+
   Map<String, dynamic> get mappedUser {
     return {
+      "username": username.value,
       "email": email,
-      "name": name,
+      "name": name.value,
       "gender": gender,
-      "imgPath": imgPath,
+      "imgPath": imgPath.value,
       "birthdate": birthdate
     };
   }
 
   static FirestoreUser mapToFirestoreUser(
-      {required Map<String, dynamic> mappedUser, required String mUsername}) {
-    String mEmail = mappedUser["email"];
-    String mName = mappedUser["name"];
-    String mGender = mappedUser["gender"];
-    String mImgPath = mappedUser["imgPath"];
-    int mBirthdate = mappedUser["birthdate"];
+      {required Map<String, dynamic> mappedUser, required String uid}) {
+    String username = mappedUser["username"];
+    String email = mappedUser["email"];
+    String name = mappedUser["name"];
+    String gender = mappedUser["gender"];
+    String imgPath = mappedUser["imgPath"];
+    int birthdate = mappedUser["birthdate"];
 
     return FirestoreUser(
-        username: mUsername,
-        name: mName,
-        email: mEmail,
-        gender: mGender,
-        imgPath: mImgPath,
-        birthdate: mBirthdate);
+        username: username.obs,
+        uid: uid,
+        name: name.obs,
+        email: email,
+        gender: gender,
+        imgPath: imgPath.obs,
+        birthdate: birthdate);
   }
+}
+
+class UserProfile {
+  final FirestoreUser userData;
+  bool likeState;
+
+  UserProfile({required this.userData, required this.likeState});
+
+  void setLikeState(bool state) => likeState = state;
 }
 
 class MiniProfile {
   final String name;
   final String? username;
-  final String? message;
   final String imgPath;
 
-  const MiniProfile(
-      {required this.name, required this.imgPath, this.message, this.username});
+  const MiniProfile({required this.name, required this.imgPath, this.username});
 }
 
 class Message {
@@ -466,3 +494,30 @@ class _MyVideoPlayerState extends State<MyVideoPlayer> {
 }
 
 enum VideoAction { forward, backward }
+
+class MyNetworkImage extends StatelessWidget {
+  final String src;
+  final double? height;
+  final BoxFit? fit;
+
+  const MyNetworkImage({super.key, required this.src, this.height, this.fit});
+
+  @override
+  Widget build(BuildContext context) {
+    return Image.network(src, height: height, fit: fit,
+        frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+      if (frame == null) {
+        return Shimmer.fromColors(
+            baseColor: Colors.grey.shade300,
+            highlightColor: Colors.grey.shade100,
+            child: Container(
+              color: Colors.red,
+              height: 85,
+              width: 85,
+            ));
+      }
+
+      return child;
+    });
+  }
+}

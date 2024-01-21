@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:texting_app/pages/chat_page.dart';
@@ -6,7 +8,8 @@ import 'package:texting_app/tools.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class FriendsTabBottomSheet extends StatefulWidget {
-  const FriendsTabBottomSheet({super.key});
+  final FirestoreUser me;
+  const FriendsTabBottomSheet({super.key, required this.me});
 
   @override
   State<FriendsTabBottomSheet> createState() => _FriendsTabBottomSheetState();
@@ -15,46 +18,57 @@ class FriendsTabBottomSheet extends StatefulWidget {
 class _FriendsTabBottomSheetState extends State<FriendsTabBottomSheet> {
   late final TextEditingController _searchController;
 
-  static List<MiniProfile> profiles = [
-    MiniProfile(
-        name: "Halmat Mohammed",
-        imgPath: MyTools.testPropic1,
-        username: "halmat10"),
-    MiniProfile(
-        name: "Hallo Ahmed", imgPath: MyTools.testPropic2, username: "hallo20"),
-    MiniProfile(
-        name: "Halkawt Mahmood",
-        imgPath: MyTools.testPropic3,
-        username: "halkawt69"),
-    MiniProfile(
-        name: "Halwest Hamamin",
-        imgPath: MyTools.testPropic1,
-        username: "halwest12"),
-    MiniProfile(
-        name: "Hallsho Mlshor",
-        imgPath: MyTools.testPropic4,
-        username: "halshomlsho"),
-    MiniProfile(
-        name: "Halgwrd Karwan",
-        imgPath: MyTools.testPropic3,
-        username: "halgwrd90")
-  ];
+  List<UserProfile> friends = [];
+  List<UserProfile> filteredFriends = [];
 
-  List<MiniProfile> filteredProfiles = [];
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseDatabase _database = FirebaseDatabase.instance;
 
   @override
   void initState() {
     _searchController = TextEditingController();
 
+    refreshFriends();
+
     _searchController.addListener(() {
-      setState(() {
-        filteredProfiles = profiles
-            .where((element) => element.name.startsWith(_searchController.text))
-            .toList();
-      });
+      if (_searchController.text.length >= 3) {
+        setState(() {
+          filteredFriends = friends
+              .where((element) =>
+                  element.userData.username.contains(_searchController.text))
+              .toList();
+        });
+      }
     });
 
     super.initState();
+  }
+
+  void refreshFriends() {
+    _firestore
+        .collection("users")
+        .doc(widget.me.uid)
+        .collection("friends")
+        .get()
+        .then((query) async {
+      friends = [];
+
+      for (QueryDocumentSnapshot<Map<String, dynamic>> doc in query.docs) {
+        _firestore.collection("users").doc(doc.id).get().then((snapshot) =>
+            _database
+                .ref("likes")
+                .child(snapshot.id)
+                .child(widget.me.uid)
+                .get()
+                .then((likeSnapshot) => friends.add(UserProfile(
+                    userData: FirestoreUser.mapToFirestoreUser(
+                        mappedUser: snapshot.data()!, uid: snapshot.id),
+                    likeState: likeSnapshot.exists))));
+      }
+    });
+
+    filteredFriends = [];
+    _searchController.clear();
   }
 
   @override
@@ -86,48 +100,129 @@ class _FriendsTabBottomSheetState extends State<FriendsTabBottomSheet> {
           ),
         ),
         const Divider(color: Colors.black45),
-        filteredProfiles.isEmpty && _searchController.text.isNotEmpty
-            ? Expanded(
+        _searchController.text.length >= 3
+            ? filteredFriends.isEmpty
+                ? Expanded(
+                    child: Center(
+                        child: Text(
+                            AppLocalizations.of(context)!.nofriendsfound,
+                            style: const TextStyle(color: Colors.black45))))
+                : Flexible(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 6),
+                      child: ListView.separated(
+                          separatorBuilder: (context, index) =>
+                              const Divider(color: Colors.black45),
+                          itemBuilder: (context, index) =>
+                              FriendTabBottomSheetTile(
+                                  onUnfriendOrBlock: () =>
+                                      setState(() => refreshFriends()),
+                                  user: filteredFriends[index],
+                                  uid: widget.me.uid,
+                                  key: UniqueKey()),
+                          itemCount: filteredFriends.length),
+                    ),
+                  )
+            : Expanded(
                 child: Center(
-                  child: Text(AppLocalizations.of(context)!.no_ppl_found),
-                ),
-              )
-            : Flexible(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 6),
-                  child: ListView.builder(
-                      itemBuilder: (context, index) => Column(children: [
-                            FriendTabBottomSheetTile(
-                                profile: _searchController.text.isEmpty
-                                    ? profiles[index]
-                                    : filteredProfiles[index]),
-                            const Divider(color: Colors.black45)
-                          ]),
-                      itemCount: _searchController.text.isEmpty
-                          ? profiles.length
-                          : filteredProfiles.length),
-                ),
-              )
+                child: Text(AppLocalizations.of(context)!.searchforfriends,
+                    style: const TextStyle(color: Colors.black45)),
+              ))
       ],
     );
   }
 }
 
-class FriendTabBottomSheetTile extends StatelessWidget {
-  const FriendTabBottomSheetTile({super.key, required this.profile});
+class FriendTabBottomSheetTile extends StatefulWidget {
+  const FriendTabBottomSheetTile(
+      {super.key,
+      required this.user,
+      required this.uid,
+      required this.onUnfriendOrBlock});
 
-  final MiniProfile profile;
+  final UserProfile user;
+  final String uid;
+  final Function() onUnfriendOrBlock;
+
+  @override
+  State<FriendTabBottomSheetTile> createState() =>
+      _FriendTabBottomSheetTileState();
+}
+
+class _FriendTabBottomSheetTileState extends State<FriendTabBottomSheetTile> {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () async {
         String? res = await Get.bottomSheet(
-            FriendProfileBottomSheet(profile: profile),
+            FriendProfileBottomSheet(
+              user: widget.user,
+              uid: widget.uid,
+            ),
             isScrollControlled: true);
 
         if (res == "message") {
-          Get.to(() => ChatPage(profile: profile), transition: Transition.fade);
+          Get.to(() => ChatPage(profile: widget.user, uid: widget.uid),
+              transition: Transition.fade);
+        } else if (res == "unfriend") {
+          Future<void> deleteFriendToMeFuture = _firestore
+              .collection("users")
+              .doc(widget.uid)
+              .collection("friends")
+              .doc(widget.user.userData.uid)
+              .delete();
+
+          Future<void> deleteMeToFriendFuture = _firestore
+              .collection("users")
+              .doc(widget.user.userData.uid)
+              .collection("friends")
+              .doc(widget.uid)
+              .delete();
+
+          await Future.wait([deleteFriendToMeFuture, deleteMeToFriendFuture]);
+
+          widget.onUnfriendOrBlock();
+        } else if (res == "block") {
+          DateTime now = DateTime.now();
+
+          Future<void> blockFriendToMeFuture = _firestore
+              .collection("users")
+              .doc(widget.uid)
+              .collection("blocklist")
+              .doc(widget.user.userData.uid)
+              .set({"timestamp": now.millisecondsSinceEpoch, "by": widget.uid});
+
+          Future<void> blockMeToFriendFuture = _firestore
+              .collection("users")
+              .doc(widget.user.userData.uid)
+              .collection("blocklist")
+              .doc(widget.uid)
+              .set({"timestamp": now.millisecondsSinceEpoch, "by": widget.uid});
+
+          Future<void> deleteFriendToMeFuture = _firestore
+              .collection("users")
+              .doc(widget.uid)
+              .collection("friends")
+              .doc(widget.user.userData.uid)
+              .delete();
+
+          Future<void> deleteMeToFriendFuture = _firestore
+              .collection("users")
+              .doc(widget.user.userData.uid)
+              .collection("friends")
+              .doc(widget.uid)
+              .delete();
+
+          await Future.wait([
+            blockFriendToMeFuture,
+            blockMeToFriendFuture,
+            deleteFriendToMeFuture,
+            deleteMeToFriendFuture
+          ]);
+
+          widget.onUnfriendOrBlock();
         }
       },
       borderRadius: BorderRadius.circular(15),
@@ -135,37 +230,26 @@ class FriendTabBottomSheetTile extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 2),
         child: Row(
           children: [
-            Padding(
-              padding: EdgeInsets.only(
-                  left: MyTools.isKurdish ? 0 : 8,
-                  right: MyTools.isKurdish ? 8 : 0),
-              child: Card(
-                  shape: const CircleBorder(),
-                  clipBehavior: Clip.hardEdge,
-                  child: Image.asset(profile.imgPath, height: 60)),
-            ),
+            const SizedBox(width: 5),
+            Card(
+                shape: const CircleBorder(),
+                clipBehavior: Clip.hardEdge,
+                child: MyNetworkImage(
+                    src: widget.user.userData.imgPath.value, height: 70)),
             Expanded(
-                child: Text(profile.name,
+                child: Text(widget.user.userData.name.value,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(fontSize: 16))),
-            Align(
-              alignment: MyTools.isKurdish
-                  ? Alignment.centerLeft
-                  : Alignment.centerRight,
-              child: Padding(
-                  padding: EdgeInsets.only(
-                      right: MyTools.isKurdish ? 0 : 5,
-                      left: MyTools.isKurdish ? 5 : 0),
-                  child: IconButton(
-                    color: Colors.purple,
-                    iconSize: 28,
-                    onPressed: () {
-                      Get.to(() => ChatPage(profile: profile),
-                          transition: Transition.fade);
-                    },
-                    icon: const Icon(Icons.chat),
-                  )),
+            IconButton(
+              color: Colors.purple,
+              iconSize: 28,
+              onPressed: () {
+                Get.to(() => ChatPage(profile: widget.user, uid: widget.uid),
+                    transition: Transition.fade);
+              },
+              icon: const Icon(Icons.chat),
             ),
+            const SizedBox(width: 4)
           ],
         ),
       ),

@@ -18,6 +18,7 @@ dependencies:
   image_cropper:
   just_audio:
   record:
+  shimmer:
   flutter_localizations:
     sdk: flutter
   intl:

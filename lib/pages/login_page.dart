@@ -305,25 +305,21 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<FirestoreUser?> getUser() async {
     if (_auth.currentUser != null) {
-      String email = _auth.currentUser!.email!;
+      String uid = _auth.currentUser!.uid;
 
-      QuerySnapshot<Map<String, dynamic>> emailQuerySnapshot =
-          await _firebaseFirestore
-              .collection("users")
-              .where("email", isEqualTo: email)
-              .get();
+      DocumentSnapshot<Map<String, dynamic>> snapshot =
+          await _firestore.collection("users").doc(uid).get();
 
-      FirestoreUser user = FirestoreUser.mapToFirestoreUser(
-          mappedUser: emailQuerySnapshot.docs.single.data(),
-          mUsername: emailQuerySnapshot.docs.single.id);
-
-      return user;
+      if (snapshot.exists) {
+        return FirestoreUser.mapToFirestoreUser(
+            mappedUser: snapshot.data()!, uid: uid);
+      }
     }
 
     return null;
   }
 
-  final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<void> login(
@@ -340,10 +336,12 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
 
-    DocumentSnapshot<Map<String, dynamic>> snapshot =
-        await _firebaseFirestore.collection("users").doc(username).get();
+    QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore
+        .collection("users")
+        .where("username", isEqualTo: username)
+        .get();
 
-    if (!snapshot.exists) {
+    if (snapshot.size < 1) {
       _usernameErrorText = AppLocalizations.of(context)!.userdoesntexist;
       _usernameFN.requestFocus();
 
@@ -351,7 +349,7 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     FirestoreUser user = FirestoreUser.mapToFirestoreUser(
-        mappedUser: snapshot.data()!, mUsername: username);
+        mappedUser: snapshot.docs.single.data(), uid: snapshot.docs.single.id);
 
     try {
       await _auth.signInWithEmailAndPassword(
@@ -367,6 +365,11 @@ class _LoginPageState extends State<LoginPage> {
           return;
         case "wrong-password" || "invalid-credential":
           _passwordErrorText = AppLocalizations.of(context)!.wrongpass;
+          _passwordFN.requestFocus();
+
+          return;
+        case "too-many-requests":
+          _passwordErrorText = AppLocalizations.of(context)!.toomanylogs;
           _passwordFN.requestFocus();
 
           return;
@@ -720,16 +723,19 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
       return;
     }
 
-    DocumentSnapshot usernameSnapshot =
-        await firebaseFirestore.collection("users").doc(username).get();
+    QuerySnapshot<Map<String, dynamic>> usernameSnapshot =
+        await firebaseFirestore
+            .collection("users")
+            .where("username", isEqualTo: username)
+            .get();
 
-    QuerySnapshot emailSnapshot = await firebaseFirestore
+    QuerySnapshot<Map<String, dynamic>> emailSnapshot = await firebaseFirestore
         .collection("users")
         .where("email", isEqualTo: email)
         .get();
 
     if (context.mounted) {
-      if (usernameSnapshot.exists) {
+      if (usernameSnapshot.size > 0) {
         _usernameErrorText = AppLocalizations.of(context)!.userexists;
         _usernameFN.requestFocus();
 
@@ -1108,45 +1114,41 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
       imgData = File(selectedImgPath!).readAsBytesSync();
     }
 
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return const SimpleDialog(
-          backgroundColor: Color.fromRGBO(227, 180, 226, 1),
+    Get.dialog(
+        SimpleDialog(
+          backgroundColor: const Color.fromRGBO(227, 180, 226, 1),
           children: [
-            Center(child: CircularProgressIndicator()),
-            SizedBox(height: 8),
-            Center(child: Text("Creating account... Please wait"))
+            const Center(child: CircularProgressIndicator()),
+            const SizedBox(height: 8),
+            Center(child: Text(AppLocalizations.of(context)!.creatingacc))
           ],
-        );
-      },
-    );
+        ),
+        barrierDismissible: false);
 
     try {
-      await firebaseAuth.createUserWithEmailAndPassword(
+      UserCredential creds = await firebaseAuth.createUserWithEmailAndPassword(
           email: mEmail, password: mPassword);
+
+      String uid = creds.user!.uid;
 
       TaskSnapshot taskSnapshot = await firebaseStorage
           .ref("users")
-          .child(mUsername)
+          .child(uid)
           .child("pfp")
           .putData(imgData);
 
       String imgPath = await taskSnapshot.ref.getDownloadURL();
 
       FirestoreUser user = FirestoreUser(
-          username: mUsername,
-          name: "$mFirstName $mLastName",
+          uid: uid,
+          username: mUsername.obs,
+          name: "$mFirstName $mLastName".obs,
           email: mEmail,
           gender: gender!,
-          imgPath: imgPath,
+          imgPath: imgPath.obs,
           birthdate: birthdate.millisecondsSinceEpoch);
 
-      await firebaseFirestore
-          .collection("users")
-          .doc(mUsername)
-          .set(user.mappedUser);
+      await firebaseFirestore.collection("users").doc(uid).set(user.mappedUser);
 
       Get.offAll(() => Home(user: user));
     } on FirebaseAuthException catch (e) {
@@ -1217,14 +1219,4 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
       }
     }
   }
-}
-
-class LowerCaseTextFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(
-          TextEditingValue oldValue, TextEditingValue newValue) =>
-      TextEditingValue(
-        selection: newValue.selection,
-        text: newValue.text.toLowerCase(),
-      );
 }

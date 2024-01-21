@@ -4,9 +4,10 @@ import 'package:texting_app/pages/chat_page.dart';
 import 'package:texting_app/tools.dart';
 
 class OnlineTab extends StatelessWidget {
-  const OnlineTab({super.key});
+  final String uid;
+  const OnlineTab({super.key, required this.uid});
 
-  static List<MiniProfile> profiles = [];
+  static List<UserProfile> profiles = [];
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,7 @@ class OnlineTab extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return Column(
                     children: [
-                      OnlineTile(profile: profiles[index]),
+                      OnlineTile(profile: profiles[index], uid: uid),
                       const Divider(color: Colors.black45)
                     ],
                   );
@@ -32,16 +33,17 @@ class OnlineTab extends StatelessWidget {
 }
 
 class OnlineTile extends StatelessWidget {
-  const OnlineTile({super.key, required this.profile});
+  const OnlineTile({super.key, required this.profile, required this.uid});
 
-  final MiniProfile profile;
+  final UserProfile profile;
+  final String uid;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
         Get.to(
-          () => ChatPage(profile: profile),
+          () => ChatPage(profile: profile, uid: uid),
           transition: Transition.fade,
           duration: const Duration(milliseconds: 200),
         );
@@ -58,11 +60,12 @@ class OnlineTile extends StatelessWidget {
               child: Card(
                   shape: const CircleBorder(),
                   clipBehavior: Clip.hardEdge,
-                  child: Image.asset(profile.imgPath, height: 60)),
+                  child:
+                      Image.asset(profile.userData.imgPath.value, height: 60)),
             ),
             Expanded(
               child: Text(
-                profile.name,
+                profile.userData.name.value,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(fontSize: 17),
               ),

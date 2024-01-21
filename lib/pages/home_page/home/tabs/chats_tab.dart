@@ -4,9 +4,10 @@ import 'package:texting_app/pages/chat_page.dart';
 import 'package:texting_app/tools.dart';
 
 class ChatsTab extends StatelessWidget {
-  const ChatsTab({super.key});
+  final String uid;
+  const ChatsTab({super.key, required this.uid});
 
-  static List<MiniProfile> profiles = [];
+  static List<UserProfile> profiles = [];
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,7 @@ class ChatsTab extends StatelessWidget {
             itemBuilder: (context, index) {
               return Column(
                 children: [
-                  ChatsTile(profile: profiles[index]),
+                  ChatsTile(profile: profiles[index], uid: uid),
                   const Divider(color: Colors.black45),
                 ],
               );
@@ -27,15 +28,17 @@ class ChatsTab extends StatelessWidget {
 }
 
 class ChatsTile extends StatelessWidget {
-  const ChatsTile({super.key, required this.profile});
+  const ChatsTile({super.key, required this.profile, required this.uid});
 
-  final MiniProfile profile;
+  final UserProfile profile;
+  final String uid;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Get.to(() => ChatPage(profile: profile), transition: Transition.fade);
+        Get.to(() => ChatPage(profile: profile, uid: uid),
+            transition: Transition.fade);
       },
       borderRadius: BorderRadius.circular(15),
       child: Padding(
@@ -49,14 +52,14 @@ class ChatsTile extends StatelessWidget {
               child: Card(
                 shape: const CircleBorder(),
                 clipBehavior: Clip.hardEdge,
-                child: Image.asset(profile.imgPath, height: 60),
+                child: Image.asset(profile.userData.imgPath.value, height: 60),
               ),
             ),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(profile.name,
+                  Text(profile.userData.name.value,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(fontSize: 16)),
                   const SizedBox(height: 4),
@@ -64,7 +67,7 @@ class ChatsTile extends StatelessWidget {
                     padding: EdgeInsets.only(
                         left: MyTools.isKurdish ? 0 : 5,
                         right: MyTools.isKurdish ? 5 : 0),
-                    child: Text(profile.message!,
+                    child: Text("msg",
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(color: Colors.black54)),
                   )

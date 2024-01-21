@@ -14,8 +14,9 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
 class ChatPage extends StatefulWidget {
-  final MiniProfile profile;
-  const ChatPage({super.key, required this.profile});
+  final String uid;
+  final UserProfile profile;
+  const ChatPage({super.key, required this.profile, required this.uid});
 
   @override
   State<ChatPage> createState() => _ChatPageState();
@@ -35,14 +36,6 @@ class _ChatPageState extends State<ChatPage> {
     _chatFocusNode = FocusNode();
     _chatController = TextEditingController();
     _chatScrollController = ScrollController();
-
-    if (widget.profile.message != null) {
-      messages.add(Message(
-          name: widget.profile.name,
-          imgPath: widget.profile.imgPath,
-          message: widget.profile.message!,
-          isSelf: false));
-    }
   }
 
   @override
@@ -71,46 +64,44 @@ class _ChatPageState extends State<ChatPage> {
             customBorder: const StadiumBorder(),
             onTap: () async {
               String? res = await Get.bottomSheet(
-                  FriendProfileBottomSheet(profile: widget.profile),
+                  FriendProfileBottomSheet(
+                      uid: widget.uid, user: widget.profile),
                   isScrollControlled: true);
 
               if (res == "unfriend" || res == "block") {
                 Get.back();
               }
             },
-            child: Padding(
-              padding: EdgeInsets.only(
-                  left: MyTools.isKurdish ? 8 : 0,
-                  right: MyTools.isKurdish ? 0 : 8),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Card(
-                      clipBehavior: Clip.antiAlias,
-                      shape: const CircleBorder(),
-                      elevation: 3,
-                      child: Image.asset(widget.profile.imgPath, height: 45)),
-                  Flexible(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(widget.profile.name,
-                            style: const TextStyle(fontSize: 14),
-                            overflow: TextOverflow.ellipsis),
-                        Padding(
-                          padding: EdgeInsets.only(
-                              left: MyTools.isKurdish ? 0 : 4,
-                              right: MyTools.isKurdish ? 4 : 0),
-                          child: Text(AppLocalizations.of(context)!.active_now,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Card(
+                    clipBehavior: Clip.antiAlias,
+                    shape: const CircleBorder(),
+                    elevation: 3,
+                    child: MyNetworkImage(
+                        src: widget.profile.userData.imgPath.value,
+                        height: 45)),
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(widget.profile.userData.name.value,
+                          style: const TextStyle(fontSize: 14),
+                          overflow: TextOverflow.ellipsis),
+                      Row(
+                        children: [
+                          const SizedBox(width: 4),
+                          Text(AppLocalizations.of(context)!.active_now,
                               style: const TextStyle(
                                   fontSize: 12, color: Colors.green),
                               overflow: TextOverflow.ellipsis),
-                        )
-                      ],
-                    ),
-                  )
-                ],
-              ),
+                        ],
+                      )
+                    ],
+                  ),
+                )
+              ],
             ),
           ),
           actions: [
